@@ -1,0 +1,106 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-image: url('/assets/images/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cadastro-box {
+  width: 100%;
+  max-width: 420px; 
+  background: white; 
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+.form-group, .password-field, .file-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  text-align: left; 
+}
+
+input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-sizing: border-box; 
+  background-color: #f9f9f9;
+}
+
+input:focus {
+  outline: none;
+  border-color: #ff6b00;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 100px; 
+  margin: 0 auto 10px auto;
+  background: transparent;
+}
+
+.logo img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.cadastro {
+  font-size: 24px;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.cadastro-button {
+  width: 100%;
+  padding: 14px;
+  background: #ff6b00;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 15px;
+}
+
+.cadastro-button:hover {
+  background: #e65a00;
+}
