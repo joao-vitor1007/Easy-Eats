@@ -1,76 +1,151 @@
-.container {
-  min-height: 100vh;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background-image: url('/assets/images/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
 }
+
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 
 .login-box {
   width: 100%;
-  max-width: 350px;
+  max-width: 420px;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-sizing: border-box;
 }
+
 
 .header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
-.logo {
-  width: 80px;
-  height: 80px;
-  background: #ff6b00;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 15px auto;
-  border-radius: 15px;
-  font-size: 32px;
+
+h1 {
+  font-size: 24px;
+  color: #1a1a1a;
+  margin: 0;
 }
 
 h1 span {
   color: #ff6b00;
 }
 
-.form-group {
-  margin-bottom: 15px;
+
+.header p {
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
 }
+
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #333;
+  text-align: left;
+}
+
 
 input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
 }
+
+input:focus {
+  outline: none;
+  border-color: #ff6b00;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
+}
+
 
 .password-field {
   position: relative;
+  display: flex;
+  flex-direction: column;
 }
+
 
 .toggle-password {
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 10px;
+  top: 38px;
   background: none;
   border: none;
+  color: #ff6b00;
+  font-size: 12px;
   cursor: pointer;
 }
 
+
 .login-button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: #ff6b00;
   border: none;
   color: white;
+  font-size: 16px;
   font-weight: bold;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 15px;
 }
+
+.login-button:hover {
+  background: #e65a00;
+}
+
 
 .footer {
   margin-top: 20px;
   text-align: center;
   font-size: 12px;
   color: #777;
+}
+
+.logo {
+  width: 100px; 
+  margin: 0 auto 10px auto;
+  background: transparent;
+}
+
+.logo img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
