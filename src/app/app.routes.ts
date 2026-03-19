@@ -11,4 +11,5 @@ export const routes: Routes = [
     path: 'cadastro',
     component: Cadastro,
   },
+  
 ];
