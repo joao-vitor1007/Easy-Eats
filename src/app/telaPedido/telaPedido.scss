@@ -1,0 +1,115 @@
+.container {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+.input-cliente {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #2ecc71;
+  color: white;
+  margin-bottom: 15px;
+}
+
+.categorias {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+
+  button {
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: none;
+    background: #2ecc71;
+    color: white;
+    cursor: pointer;
+  }
+
+  .active {
+    background: orange;
+  }
+}
+
+.produtos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
+
+.card {
+  background: #f2f2f2;
+  border-radius: 10px;
+  padding: 15px;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  .emoji {
+    font-size: 24px;
+  }
+
+  .nome {
+    font-weight: bold;
+  }
+
+  .preco {
+    color: orange;
+  }
+}
+
+.carrinho {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 10px;
+
+  .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .acoes {
+      display: flex;
+      gap: 8px;
+
+      button {
+        width: 25px;
+        height: 25px;
+        border: none;
+        border-radius: 5px;
+        background: #2ecc71;
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 18px;
+  }
+
+  .btn-finalizar {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: orange;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
