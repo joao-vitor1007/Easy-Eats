@@ -149,3 +149,15 @@ input:focus {
   height: auto;
   object-fit: contain;
 }
+.cadastro-link {
+  text-align: center;
+  margin-top: 15px;
+}
+.cadastro-link a {
+  color: #ff6b00;
+  text-decoration: none;
+  font-size: 14px;
+}
+.cadastro-link a:hover {
+  text-decoration: underline;
+}
