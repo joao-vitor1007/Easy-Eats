@@ -5,3 +5,50 @@ body {
 * {
   font-family: sans-serif;
 }
+
+.msg-validacoes {
+  color: #d32f2f;
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  margin:0;
+}
+
+// botões
+.btn-mostrar-senha {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+
+  cursor: pointer;
+
+  color: #ff6b00;
+  font-weight: bold;
+
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.btn-mostrar-senha:hover {
+  text-decoration: underline;
+}
+
+.btn-padrao {
+  width: 100%;
+  padding: 14px;
+  background: #ff6b00;
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-top: 15px;
+}
+
+.btn-padrao:hover {
+  background: #e65a00;
+}

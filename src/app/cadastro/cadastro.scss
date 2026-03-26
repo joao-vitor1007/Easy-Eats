@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -24,15 +25,17 @@ body {
 
 .cadastro-box {
   width: 100%;
-  max-width: 420px; 
-  background: white; 
+  max-width: 420px;
+  background: white;
   padding: 40px;
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
 }
 
-.form-group, .password-field, .file-group {
+.form-group,
+.password-field,
+.file-group {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
@@ -43,7 +46,7 @@ label {
   font-weight: 600;
   margin-bottom: 8px;
   color: #333;
-  text-align: left; 
+  text-align: left;
 }
 
 input {
@@ -53,7 +56,7 @@ input {
   border-radius: 8px;
   font-size: 14px;
   transition: all 0.3s ease;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   background-color: #f9f9f9;
 }
 
@@ -70,7 +73,7 @@ input:focus {
 }
 
 .logo {
-  width: 100px; 
+  width: 100px;
   margin: 0 auto 10px auto;
   background: transparent;
 }
@@ -82,25 +85,49 @@ input:focus {
 }
 
 .cadastro {
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  padding-right: 70px; 
+  width: 100%;
+}
+
+
+h1 {
   font-size: 24px;
   color: #1a1a1a;
   margin: 0;
 }
 
-.cadastro-button {
-  width: 100%;
-  padding: 14px;
-  background: #ff6b00;
-  border: none;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
-  margin-top: 15px;
+h1 span {
+  color: #ff6b00;
 }
 
-.cadastro-button:hover {
-  background: #e65a00;
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+}
+.login-link a {
+  color: #ff6b00;
+  text-decoration: none;
+  font-size: 14px;
+}
+.login-link a:hover {
+  text-decoration: underline;
+}
+.footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: #777;
 }
