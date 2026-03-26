@@ -90,20 +90,6 @@ input:focus {
   margin-top: 5px;
 }
 
-.cadastro-button {
-  width: 100%;
-  padding: 14px;
-  background: #ff6b00;
-  border: none;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s;
-  margin-top: 15px;
-}
-/* Container que agrupa o input e o botão */
 .input-wrapper {
   position: relative;
   width: 100%;
@@ -111,28 +97,11 @@ input:focus {
   align-items: center;
 }
 
-/* Ajuste no input para o texto não bater no botão */
 .input-wrapper input {
-  padding-right: 70px; /* Abre espaço na direita para o botão */
+  padding-right: 70px; 
   width: 100%;
 }
 
-/* Novo estilo único para os botões de mostrar/ocultar */
-.toggle-btn {
-  position: absolute;
-  right: 12px;
-  background: none;
-  border: none;
-  color: #ff6b00;
-  font-size: 12px;
-  font-weight: bold;
-  cursor: pointer;
-  padding: 5px;
-  z-index: 2;
-  /* Remove margens ou posicionamentos antigos */
-  transform: none;
-  top: auto;
-}
 
 h1 {
   font-size: 24px;
@@ -144,9 +113,6 @@ h1 span {
   color: #ff6b00;
 }
 
-.cadastro-button:hover {
-  background: #e65a00;
-}
 .login-link {
   text-align: center;
   margin-top: 15px;
