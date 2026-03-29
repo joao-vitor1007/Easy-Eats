@@ -1,0 +1,170 @@
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
+
+$bg-color: #fcfcfc;
+$card-bg: #ffffff;
+$border-light: #ececec;
+$text-dark: #1e293b;
+$text-muted: #64748b;
+$accent-orange: #f97316;
+$danger-red: #ef4444;
+
+.container {
+  background-color: $bg-color;
+  min-height: 100vh;
+  padding: 30px 15px;
+  display: flex;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+  padding-bottom: 100px; /* Ajuste este valor conforme necessário para liberar os botões */
+}
+
+.perfil-admin-box {
+  width: 100%;
+  max-width: 550px;
+
+  .main-title {
+    font-size: 20px;
+    color: $text-dark;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+}
+
+// Estilo dos Cards
+.profile-card {
+  background: $card-bg;
+  border: 1px solid $border-light;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+// Cabeçalho com Logo
+.header-section {
+  text-align: center;
+  
+  .avatar-circle {
+    width: 75px;  // Aumentei levemente para destacar
+    height: 75px;
+    margin: 0 auto 15px;
+    border: 2px solid #fed7aa; // Borda um pouco mais grossa
+    border-radius: 50%;
+    overflow: hidden; // ESSENCIAL: Corta tudo que sair do círculo
+    background: #fff7ed;
+    display: flex;    // Centraliza a imagem caso ela seja menor
+    align-items: center;
+    justify-content: center;
+    
+    img { 
+      width: 100%;    // Ocupa toda a largura do círculo
+      height: 100%;   // Ocupa toda a altura do círculo
+      object-fit: cover; // A MÁGICA: Preenche o espaço cortando as bordas excedentes
+      object-position: center; // Garante que o corte seja centralizado
+    }
+  }
+  
+  h2 { 
+    font-size: 18px; 
+    margin: 0; 
+    span { font-weight: normal; font-size: 14px; color: $text-muted; }
+  }
+  .description { font-size: 13px; color: $text-muted; margin-top: 8px; }
+}
+
+// Lista de Informações
+.info-section {
+  h3 { font-size: 15px; margin-bottom: 20px; color: $text-dark; }
+  
+  .info-item {
+    display: flex;
+    flex-direction: column; // Faz o conteúdo empilhar verticalmente
+    gap: 1px;              // Espaço entre o título e o valor
+    padding: 12px 0;
+    border-bottom: 1px solid #dee3e9;
+    
+    .label-title { 
+      font-size: 12px;      // Um pouco menor para dar hierarquia
+      color: $text-muted; 
+      font-weight: 500; 
+      text-transform: uppercase; // Opcional: estilo comum para rótulos superiores
+      letter-spacing: 0.5px;
+    }
+    
+    .value { 
+      font-size: 15px; 
+      color: $text-dark; 
+      font-weight: 600; 
+    }
+
+  }
+}
+
+// Grid de Botões (Ações)
+.admin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .button-row {
+    display: flex;
+    gap: 12px;
+    
+    button { flex: 1; } // Faz os dois botões ocuparem 50% cada
+  }
+}
+
+// Estilo dos Botões
+.btn-red-outline {
+  width: 100%;
+  padding: 14px;
+  background: white;
+  border: 1px solid #fee2e2;
+  color: $danger-red;
+  font-weight: 600;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+
+  &:hover {
+    background: #fef2f2;
+    border-color: $danger-red;
+  }
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
+    z-index: 1030;
+  }
+
+  .bottom-nav button {
+    background: none;
+    border: none;
+    color: #444;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .bottom-nav button:hover {
+    color: #e67e22;
+  }
+
+  .bottom-nav i {
+    font-size: 20px;
+    margin-bottom: 2px;
+  }
+
