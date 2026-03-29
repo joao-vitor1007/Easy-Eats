@@ -3,11 +3,11 @@ import { Routes } from '@angular/router';
 // Importações corrigidas seguindo a árvore de arquivos da imagem
 import { Login } from './login/login'; // Verifique se o nome da classe é LoginComponent
 import { Cadastro } from './cadastro/cadastro'; 
-import { DashboardComponent } from './dashboard/dashboard';
+import { Dashboard } from './dashboard/dashboard';
 import { ComponentFila } from './Fila/component.fila'; // Note o "F" maiúsculo da pasta Fila
 import { PerfilAdmin } from './perfilAdmin/perfilAdmin';
 import { PerfilGarcom } from './perfilGarcom/perfilGarcom';
-import { TelaPedidoComponent } from './telaPedido/telaPedido';
+import { TelaPedido } from './telaPedido/telaPedido';
 
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -21,7 +21,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent,
+    component: Dashboard,
   },
   {
     path: 'fila',
@@ -37,7 +37,7 @@ export const routes: Routes = [
   },
   {
     path: 'tela-pedido',
-    component: TelaPedidoComponent,
+    component: TelaPedido,
   },
   // Rota de fallback para 404 ou redirecionamento caso a rota não exista
   { path: '**', redirectTo: '/login' }
