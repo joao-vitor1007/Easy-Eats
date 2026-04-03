@@ -1,0 +1,55 @@
+<div class="container">
+
+  <h2>Novo Pedido</h2>
+
+  <!-- Input cliente -->
+  <input class="input-cliente" placeholder="Nome do cliente (opcional)" />
+
+  <!-- Categorias -->
+  <div class="categorias">
+    <button class="active">Todos</button>
+    <button>Lanches</button>
+    <button>Acompanhamentos</button>
+    <button>Bebidas</button>
+  </div>
+
+  <!-- Produtos -->
+  <div class="produtos">
+    <div 
+      class="card" 
+      *ngFor="let produto of produtos"
+      (click)="adicionar(produto)"
+    >
+      <div class="emoji">{{ produto.emoji }}</div>
+      <div class="nome">{{ produto.nome }}</div>
+      <div class="preco">R$ {{ produto.preco.toFixed(2) }}</div>
+    </div>
+  </div>
+
+  <!-- Carrinho -->
+  <div class="carrinho">
+    <h3>Carrinho ({{ carrinho.length }})</h3>
+
+    <div *ngFor="let item of carrinho" class="item">
+      <span>{{ item.nome }}</span>
+
+      <div class="acoes">
+        <button (click)="diminuir(item)">-</button>
+        <span>{{ item.qtd }}</span>
+        <button (click)="aumentar(item)">+</button>
+      </div>
+
+      <span class="preco">R$ {{ (item.preco * item.qtd).toFixed(2) }}</span>
+    </div>
+
+    <div class="total">
+      <strong>Total</strong>
+      <span>R$ {{ total().toFixed(2) }}</span>
+    </div>
+
+    <button class="btn-finalizar">
+      Revisar Pedido
+    </button>
+  </div>
+
+</div>
