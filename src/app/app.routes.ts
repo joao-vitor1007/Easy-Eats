@@ -7,6 +7,7 @@ import { PerfilAdmin } from './perfilAdmin/perfilAdmin';
 import { PerfilGarcom } from './perfilGarcom/perfilGarcom';
 import { ConfirmarPedComponent } from './confirmar-ped/confirmar-ped';
 
+
 export const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   {
