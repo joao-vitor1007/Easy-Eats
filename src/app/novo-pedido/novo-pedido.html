@@ -1,0 +1,116 @@
+<div class="page">
+  <div class="wrapper">
+
+    <!-- ESQUERDA -->
+    <div class="conteudo">
+      <h2>Novo Pedido</h2>
+
+      <input
+        type="text"
+        placeholder="Nome do cliente (opcional)"
+        [(ngModel)]="cliente"
+        class="cliente-input"
+      />
+
+      <!-- Categorias -->
+      <div class="categorias">
+        <button
+          *ngFor="let cat of categorias"
+          [class.active]="categoriaSelecionada === cat"
+          (click)="selecionarCategoria(cat)"
+        >
+          {{ cat }}
+        </button>
+      </div>
+
+      <!-- Produtos -->
+      <div class="produtos">
+        <div
+          class="card"
+          *ngFor="let produto of produtosFiltrados()"
+          (click)="adicionarAoCarrinho(produto)"
+        >
+          <div class="emoji">{{ produto.emoji }}</div>
+
+          <div class="info">
+            <h4>{{ produto.nome }}</h4>
+            <span>R$ {{ produto.preco.toFixed(2) }}</span>
+          </div>
+           <button
+        class="info-btn"
+        (click)="abrirDetalhes(produto); $event.stopPropagation()"
+        aria-label="Detalhes do produto">
+        i
+            </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIREITA (Carrinho) -->
+<div class="carrinho" *ngIf="carrinho.length > 0">
+  <h3>🛒 Carrinho ({{ carrinho.length }})</h3>
+
+  <div *ngFor="let item of carrinho; let i = index" class="item">
+    
+    <div class="left">
+      <span class="emoji">{{ item.emoji }}</span>
+      <span class="nome">{{ item.nome }}</span>
+    </div>
+
+    <div class="right">
+      <div class="qtd">
+        <button (click)="diminuirQtd(i)">−</button>
+        <span>{{ item.qtd }}</span>
+        <button (click)="aumentarQtd(i)">+</button>
+      </div>
+
+      <span class="preco">
+        R$ {{ (item.preco * item.qtd).toFixed(2) }}
+      </span>
+    </div>
+
+  </div>
+
+  <hr />
+
+  <div class="total">
+    <span>Total</span>
+    <strong>R$ {{ total().toFixed(2) }}</strong>
+  </div>
+
+  <button class="finalizar" (click)="confirmarPedido()">
+    Finalizar Pedido
+  </button>
+</div>
+    <div class="bottom-nav">
+    <button type="button" routerLink="/dashboard" routerLinkActive="active">
+        <i class="bi bi-house-door"></i>
+        <span>Painel</span>
+    </button>
+
+    <button type="button">
+        <i class="bi bi-cart"></i>
+        <span>Pedido</span>
+    </button>
+
+    <button type="button">
+        <i class="bi bi-list-task"></i>
+        <span>Fila</span>
+    </button>
+
+    <button type="button">
+        <i class="bi bi-clock-history"></i>
+        <span>Histórico</span>
+    </button>
+
+    <button type="button" routerLink="/perfil-admin" routerLinkActive="active">
+        <i class="bi bi-person-circle"></i>
+        <span>Perfil</span>
+    </button>
+
+
+</div>
+
+
+  </div>
+</div>
