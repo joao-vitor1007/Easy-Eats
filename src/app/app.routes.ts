@@ -45,12 +45,10 @@ export const routes: Routes = [
 {
   path: 'controle-estoque',
   component: ControleEstoque,
-}]
-  {
-    path: 'tela-pedido',
-    component: TelaPedido,
-  },
-  // Rota de fallback para 404 ou redirecionamento caso a rota não exista
-  { path: '**', redirectTo: '/login' }
+},
+{
+  path: 'tela-pedido',
+  component: TelaPedido,
+},
 ];
 
