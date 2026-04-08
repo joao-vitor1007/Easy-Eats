@@ -1,0 +1,117 @@
+:host {
+  display: block;
+  background-color: #fcfcfc; 
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.page-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    // Detalhe sutil de borda laranja embaixo do título
+    border-left: 5px solid #ff8c00;
+    padding-left: 15px;
+  }
+
+  .btn-voltar {
+    background: white;
+    border: 1px solid #ffdec2; // Borda levemente laranja
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #ff8c00; // Texto laranja
+    font-weight: 600;
+    transition: 0.3s;
+
+    &:hover {
+      background: #fff5eb; // Fundo laranja bem clarinho
+      border-color: #ff8c00;
+    }
+  }
+}
+
+.card-form {
+  background: white;
+  border: 1px solid #ffdec2; // Borda do card em laranja claro
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(255, 140, 0, 0.05); // Sombra levemente alaranjada
+
+  .input-group {
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+
+    label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 10px;
+      text-transform: uppercase; // Estilo de formulário moderno
+      letter-spacing: 0.5px;
+    }
+
+    input {
+      padding: 14px 18px;
+      border: 2px solid #f0f0f0; // Borda padrão neutra
+      border-radius: 12px;
+      font-size: 15px;
+      background: #fafafa;
+      transition: all 0.3s ease;
+
+      &:focus {
+        outline: none;
+        border-color: #ff8c00; // Borda laranja ao clicar
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(255, 140, 0, 0.1); // Brilho laranja em volta
+      }
+    }
+  }
+
+  .input-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+  }
+
+  .btn-save {
+    width: 100%; // Botão ocupando a largura toda para destaque
+    background-color: #ff8c00; // Laranja principal
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+
+    &:hover {
+      background-color: #e67e00;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+    }
+
+    &:disabled {
+      background-color: #ffd8b5; // Laranja bem apagado para desabilitado
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+}
