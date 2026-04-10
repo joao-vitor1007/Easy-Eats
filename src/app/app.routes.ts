@@ -54,4 +54,12 @@ export const routes: Routes = [
     path: 'financeiro',
     component: Financeiro,
   },
+  {
+    path: 'novo-pedido',
+    component: NovoPedido,
+  },
+  {
+    path: 'cadastro-produto',
+    component: CadastroProdutoComponent,
+  },
 ];
