@@ -1,10 +1,7 @@
 <div class="container">
-
   <h2>Histórico de Vendas</h2>
 
-  <!-- KPIs -->
   <div class="cards">
-
     <div class="card kpi">
       <div class="icon">$</div>
       <div>
@@ -20,34 +17,33 @@
         <small>Pedidos</small>
       </div>
     </div>
-
   </div>
 
-  <!-- BUSCA -->
-  <input 
-    type="text" 
-    placeholder="🔍 Buscar por nome ou #pedido"
-    class="input-busca"
-  />
+  <input type="text" placeholder="🔍 Buscar por nome ou #pedido" class="input-busca" />
 
-  <!-- FILTROS -->
   <div class="filtros">
-    <button [class.ativo]="filtroSelecionado === 'todos'" 
-      (click)="selecionarFiltro('todos')">Todos</button>
-    <button [class.ativo]="filtroSelecionado === 'aguardando'" 
-      (click)="selecionarFiltro('aguardando')">Aguardando</button>
-    <button [class.ativo]="filtroSelecionado === 'preparando'" 
-      (click)="selecionarFiltro('preparando')">Preparando</button>
-    <button [class.ativo]="filtroSelecionado === 'pronto'" 
-      (click)="selecionarFiltro('pronto')">Pronto</button>
+    <button [class.ativo]="filtroSelecionado === 'todos'" (click)="selecionarFiltro('todos')">
+      Todos
+    </button>
+    <button
+      [class.ativo]="filtroSelecionado === 'aguardando'"
+      (click)="selecionarFiltro('aguardando')"
+    >
+      Aguardando
+    </button>
+    <button
+      [class.ativo]="filtroSelecionado === 'preparando'"
+      (click)="selecionarFiltro('preparando')"
+    >
+      Preparando
+    </button>
+    <button [class.ativo]="filtroSelecionado === 'pronto'" (click)="selecionarFiltro('pronto')">
+      Pronto
+    </button>
   </div>
 
-  <!-- LISTA -->
   <div class="lista">
-
-    <!-- Pedido 1 -->
     <div class="card pedido">
-
       <div class="top">
         <strong>#001 João</strong>
         <span class="status preparando">Preparando</span>
@@ -63,12 +59,9 @@
         <span>02:21</span>
         <strong class="valor">R$ 70.00</strong>
       </div>
-
     </div>
 
-    <!-- Pedido 2 -->
     <div class="card pedido">
-
       <div class="top">
         <strong>#002 Maria</strong>
         <span class="status aguardando">Aguardando</span>
@@ -83,9 +76,33 @@
         <span>02:21</span>
         <strong class="valor">R$ 42.00</strong>
       </div>
-
     </div>
 
-  </div>
+    <div class="bottom-nav">
+      <button type="button" (click)="acessarRota('/dashboard')">
+        <i class="bi bi-house-door"></i>
+        <span>Painel</span>
+      </button>
 
+      <button type="button" (click)="acessarRota('/novo-pedido')">
+        <i class="bi bi-cart"></i>
+        <span>Pedido</span>
+      </button>
+
+      <button (click)="acessarRota('/fila')" type="button">
+        <i class="bi bi-list-task"></i>
+        <span>Fila</span>
+      </button>
+
+      <button type="button" (click)="acessarRota('/historico-vendas')">
+        <i class="bi bi-clock-history"></i>
+        <span>Histórico</span>
+      </button>
+
+      <button type="button" (click)="acessarRota('/perfil-admin')">
+        <i class="bi bi-person-circle"></i>
+        <span>Perfil</span>
+      </button>
+    </div>
+  </div>
 </div>

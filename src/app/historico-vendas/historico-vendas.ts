@@ -1,5 +1,5 @@
-
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 interface Pedido {
   id: number;
@@ -13,9 +13,10 @@ interface Pedido {
 @Component({
   selector: 'app-historico-vendas',
   templateUrl: './historico-vendas.html',
-  styleUrls: ['./historico-vendas.scss']
+  styleUrls: ['./historico-vendas.scss'],
 })
 export class HistoricoVendasComponent {
+  private router = inject(Router);
   filtroSelecionado: 'todos' | 'aguardando' | 'preparando' | 'pronto' = 'todos';
 
   pedidos: Pedido[] = [
@@ -25,23 +26,23 @@ export class HistoricoVendasComponent {
       itens: [
         { nome: 'Hambúrguer Clássico', quantidade: 2 },
         { nome: 'Batata Frita', quantidade: 1 },
-        { nome: 'Coca-Cola', quantidade: 2 }
+        { nome: 'Coca-Cola', quantidade: 2 },
       ],
       horario: '02:21',
       status: 'preparando',
-      total: 70
+      total: 70,
     },
     {
       id: 2,
       cliente: 'Maria',
       itens: [
         { nome: 'X-Bacon', quantidade: 1 },
-        { nome: 'Onion Rings', quantidade: 1 }
+        { nome: 'Onion Rings', quantidade: 1 },
       ],
       horario: '02:21',
       status: 'aguardando',
-      total: 42
-    }
+      total: 42,
+    },
   ];
 
   filtroStatus: string = 'todos';
@@ -49,16 +50,13 @@ export class HistoricoVendasComponent {
 
   get pedidosFiltrados(): Pedido[] {
     return this.pedidos
-      .filter(p => {
+      .filter((p) => {
         if (this.filtroStatus === 'todos') return true;
         return p.status === this.filtroStatus;
       })
-      .filter(p => {
+      .filter((p) => {
         const termo = this.busca.toLowerCase();
-        return (
-          p.cliente.toLowerCase().includes(termo) ||
-          p.id.toString().includes(termo)
-        );
+        return p.cliente.toLowerCase().includes(termo) || p.id.toString().includes(termo);
       })
       .sort((a, b) => b.id - a.id);
   }
@@ -77,5 +75,9 @@ export class HistoricoVendasComponent {
 
   selecionarFiltro(filtro: any) {
     this.filtroSelecionado = filtro;
+  }
+
+  protected acessarRota(rota: string) {
+    this.router.navigate([rota]);
   }
 }
