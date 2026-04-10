@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 interface Produto {
   id: number;
@@ -13,6 +14,7 @@ interface Produto {
 @Component({
   selector: 'app-financeiro',
   templateUrl: './financeiro.html',
+  imports: [CommonModule],
   styleUrls: ['./financeiro.scss']
 })
 export class Financeiro {
