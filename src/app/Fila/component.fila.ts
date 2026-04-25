@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { StatusPedidoEnum } from '../enum/pedidosEnum';
+import { Navbar } from '../components/navbar';
 
 interface Pedido {
   id: string;
@@ -14,6 +15,7 @@ interface Pedido {
   selector: 'app-fila',
   templateUrl: './component.fila.html',
   styleUrls: ['./component.fila.scss'],
+  imports: [Navbar],
 })
 export class ComponentFila {
   private router = inject(Router);
