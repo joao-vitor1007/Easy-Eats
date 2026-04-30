@@ -1,58 +1,54 @@
-<body>
-  <div class="container">
-    <div class="cadastro-box">
-      <div class="header">
-        <div class="logo">
-          <img src="/assets/images/logo-easyeats-carrinho2.png" />
-        </div>
-        <h1>Easy<span>Eats</span></h1>
-        <p class="cadastro">Cadastro Garçom</p>
+<div class="container">
+  <div class="cadastro-box">
+    <div class="header">
+      <div class="logo">
+        <img src="/assets/images/logo-easyeats-carrinho2.png" />
+      </div>
+      <h1>Easy<span>Eats</span></h1>
+      <p>Cadastro Garçom</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()">
+      <div class="form-group">
+        <label>Nome Completo</label>
+        <input type="text" placeholder="Seu nome completo" formControlName="nome" />
+        <small *ngIf="form.get('nome')?.touched && form.get('nome')?.errors">
+          <p class="msg-validacoes">{{ mensagensValidacoes.nome.required }}</p>
+        </small>
       </div>
 
-      <form [formGroup]="form" (ngSubmit)="salvar()">
-        <div class="form-group">
-          <label>Nome Completo</label>
-          <input type="text" placeholder="Seu nome completo" formControlName="nome" />
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" placeholder="seu@email.com" formControlName="email" />
+        <small *ngIf="form.get('email')?.touched && form.get('email')?.errors">
+          <span *ngIf="form.get('email')?.errors?.['required']">
+            <p class="msg-validacoes">{{ mensagensValidacoes.email.required }}</p>
+          </span>
+          <span *ngIf="form.get('email')?.errors?.['email']">
+            <p class="msg-validacoes">{{ mensagensValidacoes.email.required }}</p>
+          </span>
+        </small>
+      </div>
 
-          <small *ngIf="form.get('nome')?.touched && form.get('nome')?.errors">
-            <p class="msg-validacoes">{{ mensagensValidacoes.nome.required }}</p>
-          </small>
-        </div>
+      <div class="form-group">
+        <label>Telefone</label>
+        <input type="text" placeholder="(00) 00000-0000" formControlName="telefone" />
+        <small *ngIf="form.get('telefone')?.touched && form.get('telefone')?.errors">
+          <p class="msg-validacoes">{{ mensagensValidacoes.telefone.required }}</p>
+        </small>
+      </div>
 
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" placeholder="seu@email.com" formControlName="email" />
+      <div class="form-group">
+        <label>CPF</label>
+        <input type="text" placeholder="000.000.000-00" formControlName="cpf" />
+        <small *ngIf="form.get('cpf')?.touched && form.get('cpf')?.errors">
+          <p class="msg-validacoes">{{ mensagensValidacoes.cpf.required }}</p>
+        </small>
+      </div>
 
-          <small *ngIf="form.get('email')?.touched && form.get('email')?.errors">
-            <span *ngIf="form.get('email')?.errors?.['required']">
-              <p class="msg-validacoes">{{ mensagensValidacoes.email.required }}</p>
-            </span>
-            <span *ngIf="form.get('email')?.errors?.['email']">
-              <p class="msg-validacoes">{{ mensagensValidacoes.email.required }}</p>
-            </span>
-          </small>
-        </div>
-
-        <div class="form-group">
-          <label>Telefone</label>
-          <input type="text" placeholder="(00) 00000-0000" formControlName="telefone" />
-
-          <small *ngIf="form.get('telefone')?.touched && form.get('telefone')?.errors">
-           <p class="msg-validacoes">{{ mensagensValidacoes.telefone.required }}</p>
-          </small>
-        </div>
-
-        <div class="form-group">
-          <label>CPF</label>
-          <input type="text" placeholder="000.000.000-00" formControlName="cpf" />
-
-          <small *ngIf="form.get('cpf')?.touched && form.get('cpf')?.errors">
-            <p class="msg-validacoes">{{ mensagensValidacoes.cpf.required }}</p>
-          </small>
-        </div>
-
+      <div class="form-group">
+        <label>Senha</label>
         <div class="password-field">
-          <label>Senha</label>
           <div class="input-wrapper">
             <input
               [type]="showPassword ? 'text' : 'password'"
@@ -63,15 +59,15 @@
               {{ showPassword ? 'Ocultar' : 'Mostrar' }}
             </button>
           </div>
-
-          <small *ngIf="form.get('senha')?.touched && form.get('senha')?.errors">
-            <p class="msg-validacoes">{{ mensagensValidacoes.senha.required }}</p>
-            </small>
-
         </div>
+        <small *ngIf="form.get('senha')?.touched && form.get('senha')?.errors">
+          <p class="msg-validacoes">{{ mensagensValidacoes.senha.required }}</p>
+        </small>
+      </div>
 
+      <div class="form-group">
+        <label>Confirmar Senha</label>
         <div class="password-field">
-          <label>Confirmar Senha</label>
           <div class="input-wrapper">
             <input
               [type]="showPasswordDown ? 'text' : 'password'"
@@ -82,21 +78,19 @@
               {{ showPasswordDown ? 'Ocultar' : 'Mostrar' }}
             </button>
           </div>
-
-          <small *ngIf="form.get('senha')?.touched && form.get('senha')?.errors">
-            <p class="msg-validacoes">{{ mensagensValidacoes.senha.required }}</p>
-            </small>
-
         </div>
+        <small *ngIf="form.get('confirmarSenha')?.touched && form.get('confirmarSenha')?.errors">
+          <p class="msg-validacoes">{{ mensagensValidacoes.confirmarSenha.required }}</p>
+        </small>
+      </div>
 
-        <button type="submit"class="btn-padrao">
-          Cadastrar
-        </button>
-        <p class="login-link">
-          <a href="/login">Já tem uma conta? Faça login</a>
-        </p>
-      </form>
-      <p class="footer">EasyEats POS © {{ currentYear }}</p>
-    </div>
+      <button type="submit" class="btn-padrao">Cadastrar</button>
+
+      <p class="login-link">
+        <a href="/login">Já tem uma conta? Faça login</a>
+      </p>
+    </form>
+
+    <p class="footer">EasyEats POS © {{ currentYear }}</p>
   </div>
-</body>
+</div>

@@ -1,13 +1,12 @@
 <div class="controle-estoque">
-
   <h2>Controle de Estoque</h2>
 
   <div class="alerta-estoque-baixo" *ngIf="estoqueBaixo.length > 0" role="alert" aria-live="polite">
     <strong>⚠️ Estoque Baixo</strong>
     <ul>
       <li *ngFor="let item of estoqueBaixo">
-        <span class="emoji">{{item.emoji}}</span> {{item.nome}}
-        <span class="quantidade">{{item.atual}} / mín. {{item.minimo}}</span>
+        <span class="emoji">{{ item.emoji }}</span> {{ item.nome }}
+        <span class="quantidade">{{ item.atual }} / mín. {{ item.minimo }}</span>
       </li>
     </ul>
   </div>
@@ -17,7 +16,7 @@
       <button
         [class.active]="tipoMovimentacao === 'entrada'"
         (click)="alternarTipo('entrada')"
-        aria-pressed="{{tipoMovimentacao === 'entrada'}}"
+        aria-pressed="{{ tipoMovimentacao === 'entrada' }}"
         type="button"
       >
         📦 Entrada
@@ -25,7 +24,7 @@
       <button
         [class.active]="tipoMovimentacao === 'saida'"
         (click)="alternarTipo('saida')"
-        aria-pressed="{{tipoMovimentacao === 'saida'}}"
+        aria-pressed="{{ tipoMovimentacao === 'saida' }}"
         type="button"
       >
         📤 Saída
@@ -40,7 +39,7 @@
         aria-label="Selecione o produto"
       >
         <option value="" disabled selected>Selecione o produto</option>
-        <option *ngFor="let produto of produtos" [value]="produto">{{produto}}</option>
+        <option *ngFor="let produto of produtos" [value]="produto">{{ produto }}</option>
       </select>
 
       <input
@@ -62,7 +61,7 @@
       />
 
       <button type="button" (click)="registrarMovimentacao()" class="btn-registrar">
-        + Registrar {{tipoMovimentacao === 'entrada' ? 'Entrada' : 'Saída'}}
+        + Registrar {{ tipoMovimentacao === 'entrada' ? 'Entrada' : 'Saída' }}
       </button>
     </form>
   </section>
@@ -71,31 +70,5 @@
     <h3>Histórico de Movimentações</h3>
     <p>Nenhuma movimentação registrada.</p>
   </section>
-  <div class="bottom-nav">
-    <button type="button" routerLink="/dashboard" routerLinkActive="active">
-        <i class="bi bi-house-door"></i>
-        <span>Painel</span>
-    </button>
-
-    <button type="button">
-        <i class="bi bi-cart"></i>
-        <span>Pedido</span>
-    </button>
-
-    <button type="button">
-        <i class="bi bi-list-task"></i>
-        <span>Fila</span>
-    </button>
-
-    <button type="button">
-        <i class="bi bi-clock-history"></i>
-        <span>Histórico</span>
-    </button>
-
-    <button type="button" routerLink="/perfil-admin" routerLinkActive="active">
-        <i class="bi bi-person-circle"></i>
-        <span>Perfil</span>
-    </button>
-
-
+  <app-navbar></app-navbar>
 </div>

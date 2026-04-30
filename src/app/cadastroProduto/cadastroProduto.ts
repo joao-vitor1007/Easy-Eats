@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Navbar } from '../../components/navbar';
 
 @Component({
   selector: 'app-cadastro-produto',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, Navbar],
   templateUrl: './cadastroProduto.html',
-  styleUrls: ['./cadastroProduto.scss']
+  styleUrls: ['./cadastroProduto.scss'],
 })
 export class CadastroProdutoComponent {
   currentYear = new Date().getFullYear();
@@ -16,7 +17,7 @@ export class CadastroProdutoComponent {
     nome: new FormControl('', Validators.required),
     categoria: new FormControl('', Validators.required),
     preco: new FormControl('', Validators.required),
-    estoque: new FormControl('', Validators.required)
+    estoque: new FormControl('', Validators.required),
   });
 
   salvar() {

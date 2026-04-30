@@ -1,19 +1,19 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Navbar } from '../../components/navbar';
 
 @Component({
   selector: 'app-controle-estoque',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule, Navbar],
   templateUrl: './controle-estoque.html',
-  styleUrls: ['./controle-estoque.scss']
+  styleUrls: ['./controle-estoque.scss'],
 })
 export class ControleEstoque {
-
   estoqueBaixo = [
     { nome: 'Batata Frita', emoji: '🍟', atual: 3, minimo: 10 },
-    { nome: 'Guaraná', emoji: '🥤', atual: 2, minimo: 10 }
+    { nome: 'Guaraná', emoji: '🥤', atual: 2, minimo: 10 },
   ];
 
   tipoMovimentacao: 'entrada' | 'saida' = 'entrada';

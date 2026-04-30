@@ -1,26 +1,35 @@
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
 
-body {
-  padding-bottom: 70px; /* espaço para o menu inferior */
-  font-family: Arial, sans-serif;
-  /* imagem de fundo */
-  background-image: url('/assets/images/background.png');
-  background-position: center; /* centraliza */
-  background-repeat: no-repeat;
-  background-color: #e0e0e0; /* fallback */
-  margin: 0;
-  min-height: 100vh; /* para garantir que o fundo cubra toda a altura */
+:host {
+  display: flex;
+  min-height: calc(100vh - 70px);
+  width: 100%;
+
+  padding: 30px 15px;
+  box-sizing: border-box;
 }
 
-/* Container centralizado */
+body {
+  padding-bottom: 70px;
+  font-family: Arial, sans-serif;
+  background-image: url('/assets/images/background.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #e0e0e0;
+  margin: 0;
+  min-height: 100vh;
+}
+
 .container {
-  max-width: 700px; /* largura máxima */
-  margin: 20px auto; /* centralizar horizontalmente com um respiro no topo */
-  background: white; /* fundo branco do conteúdo */
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  background: white;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 h2 {

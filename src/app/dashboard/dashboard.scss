@@ -1,123 +1,172 @@
 @import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
-  body {
-    padding-bottom: 70px; /* espaço para o menu inferior */
-    font-family: Arial, sans-serif;
-      /* imagem de fundo */
-  background-image: url('/assets/images/background.png');
-  background-position: center; /* centraliza */
-  background-repeat: no-repeat;
-  background-color: #e0e0e0;  /* fallback */
-  margin: 0;
-  font-family: Arial, sans-serif;
-  min-height: 100vh; /* para garantir que o fundo cubra toda a altura */
-  }
 
-  .bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: #fff;
-    border-top: 1px solid #dee2e6;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 8px 0;
-    box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
-    z-index: 1030;
-  }
-
-  .bottom-nav button {
-    background: none;
-    border: none;
-    color: #444;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-size: 12px;
-    cursor: pointer;
-  }
-
-  .bottom-nav button:hover {
-    color: #e67e22;
-  }
-
-  .bottom-nav i {
-    font-size: 20px;
-    margin-bottom: 2px;
-  }
-
-
-
-
-  /* Container centralizado */
-.container {
-    max-width: 700px;      /* largura máxima */
-    margin: 0 auto;        /* centralizar horizontalmente */
-    background: white;     /* fundo branco do conteúdo */
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  }
-
-h1 {
-    margin: 0;
-  }
-.sub {
-    color: gray;
-    margin-bottom: 20px;
-  }
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-  }
-.card {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 0 5px rgba(0,0,0,0.1);
-  }
-.valor {
-    font-size: 24px;
-    font-weight: bold;
-  }
-.btn {
-    margin-top: 20px;
-    width: 100%;
-    padding: 15px;
-    background: #ff6b00;
-    border: none;
-    border-radius: 10px;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-  }
-.lista {
-    margin-top: 20px;
-  }
-
-.item{
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  margin-top: 10px;
+/* --- ESTRUTURA E CENTRALIZAÇÃO (Padrão Histórico) --- */
+:host {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  min-height: calc(100vh - 70px);
+  width: 100%;
+  padding: 30px 15px;
+  box-sizing: border-box;
 }
-.status {
-    background: #ffe0b2;
-    padding: 5px 10px;
-    border-radius: 10px;
-    color: orange;
-  }
 
-  .paragrafo {
+body {
+  padding-bottom: 70px;
+  font-family: Arial, sans-serif;
+  background-image: url('/assets/images/background.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #e0e0e0;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+/* --- TIPOGRAFIA DO CABEÇALHO --- */
+h1 {
+  margin-top: 0;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.sub {
+  color: #777;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+/* --- CARDS SUPERIORES --- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eaeaea; /* Borda padrão do Histórico */
+}
+
+.valor {
+  font-size: 22px; /* Reduzido de 24px para 22px para casar com o Histórico */
+  font-weight: bold;
+  display: block;
+}
+
+.paragrafo {
   margin-top: 5px;
   text-align: left;
   font-size: 14px;
   color: #777;
 }
-  
+
+/* --- BOTÃO --- */
+.btn {
+  width: 100%;
+  padding: 12px; /* Ajustado para ficar proporcional aos inputs */
+  background: #ff6b00;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* --- LISTA DE ÚLTIMOS PEDIDOS --- */
+.lista {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Padrão de gap do Histórico */
+  margin-top: 20px;
+}
+
+h3 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.item {
+  background: white;
+  padding: 15px;
+  border-radius: 12px; /* Padronizado com o radius dos cards */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #eaeaea; /* Borda padrão adicionada */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* --- STATUS DAS TAGS --- */
+.status {
+  padding: 5px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.status.preparando {
+  background: #ffe0b2;
+  color: #e67e22; /* Cor hexadecimal exata do Histórico */
+}
+
+.status.pronto {
+  background: #d4edda;
+  color: #28a745;
+}
+
+.status.entregue {
+  background: #e0e0e0; /* Fundo neutro para entregue */
+  color: #555;
+}
+
+/* --- NAVBAR INFERIOR --- */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-top: 1px solid #dee2e6;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1030;
+}
+
+.bottom-nav button {
+  background: none;
+  border: none;
+  color: #444;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.bottom-nav button:hover {
+  color: #e67e22;
+}
+
+.bottom-nav i {
+  font-size: 20px;
+  margin-bottom: 2px;
+}

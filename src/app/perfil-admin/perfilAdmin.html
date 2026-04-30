@@ -81,30 +81,4 @@
     </div>
   </div>
 </div>
-<!-- Menu inferior com ícones -->
-<div class="bottom-nav">
-  <button type="button" (click)="acessarRota('/dashboard')">
-    <i class="bi bi-house-door"></i>
-    <span>Painel</span>
-  </button>
-
-  <button type="button" (click)="acessarRota('/novo-pedido')">
-    <i class="bi bi-cart"></i>
-    <span>Pedido</span>
-  </button>
-
-  <button type="button" (click)="acessarRota('/fila')">
-    <i class="bi bi-list-task"></i>
-    <span>Fila</span>
-  </button>
-
-  <button type="button" (click)="acessarRota('/historico-vendas')">
-    <i class="bi bi-clock-history"></i>
-    <span>Histórico</span>
-  </button>
-
-  <button type="button" (click)="acessarRota('/perfil-admin')">
-    <i class="bi bi-person-circle"></i>
-    <span>Perfil</span>
-  </button>
-</div>
+<app-navbar></app-navbar>

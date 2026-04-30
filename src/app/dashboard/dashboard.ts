@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router } from '@angular/router';
 import { StatusPedidoEnum } from '../enum/pedidosEnum';
+import { Navbar } from '../../components/navbar';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [Navbar],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss'],
 })

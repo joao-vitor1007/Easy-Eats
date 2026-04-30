@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Navbar } from '../../components/navbar';
 
 @Component({
   selector: 'app-perfil-admin',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, Navbar],
   templateUrl: './perfilAdmin.html',
   styleUrl: './perfilAdmin.scss',
 })

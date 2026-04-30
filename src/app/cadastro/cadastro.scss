@@ -11,13 +11,21 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-attachment: fixed;
 }
 
 .container {
   width: 100%;
+  min-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+
+  background-image: url('/assets/images/background.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
   display: flex;
   justify-content: center;
   align-items: center;
@@ -33,9 +41,40 @@ body {
   box-sizing: border-box;
 }
 
-.form-group,
-.password-field,
-.file-group {
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.logo {
+  width: 100px;
+  margin: 0 auto 10px auto;
+  background: transparent;
+}
+
+.logo img {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+h1 {
+  font-size: 24px;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+h1 span {
+  color: #ff6b00;
+}
+
+.header p {
+  font-size: 14px;
+  color: #777;
+  margin-top: 5px;
+}
+
+.form-group {
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
@@ -67,27 +106,10 @@ input:focus {
   box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.1);
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.logo {
-  width: 100px;
-  margin: 0 auto 10px auto;
-  background: transparent;
-}
-
-.logo img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-}
-
-.cadastro {
-  font-size: 14px;
-  color: #777;
-  margin-top: 5px;
+.password-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .input-wrapper {
@@ -98,33 +120,24 @@ input:focus {
 }
 
 .input-wrapper input {
-  padding-right: 70px; 
-  width: 100%;
-}
-
-
-h1 {
-  font-size: 24px;
-  color: #1a1a1a;
-  margin: 0;
-}
-
-h1 span {
-  color: #ff6b00;
+  padding-right: 70px;
 }
 
 .login-link {
   text-align: center;
   margin-top: 15px;
 }
+
 .login-link a {
   color: #ff6b00;
   text-decoration: none;
   font-size: 14px;
 }
+
 .login-link a:hover {
   text-decoration: underline;
 }
+
 .footer {
   margin-top: 20px;
   text-align: center;

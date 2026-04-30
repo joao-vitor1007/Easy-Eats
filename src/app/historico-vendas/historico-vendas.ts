@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
+import { Navbar } from '../../components/navbar';
 
 interface Pedido {
   id: number;
@@ -14,6 +15,7 @@ interface Pedido {
   selector: 'app-historico-vendas',
   templateUrl: './historico-vendas.html',
   styleUrls: ['./historico-vendas.scss'],
+  imports: [Navbar],
 })
 export class HistoricoVendasComponent {
   private router = inject(Router);
