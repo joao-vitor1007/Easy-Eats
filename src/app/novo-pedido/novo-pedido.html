@@ -15,7 +15,7 @@
   }
 
   @if (carregando) {
-    <p class="carregando">Carregando produtos...</p>
+    <app-carregando texto="Carregando produtos..."></app-carregando>
   } @else {
     <div class="wrapper">
       <div class="conteudo">
@@ -72,11 +72,22 @@
         <div class="carrinho">
           <h3><i class="bi bi-cart3"></i> Carrinho ({{ carrinho.length }})</h3>
 
-          @for (item of carrinho; track item.produto.id; let i = $index) {
+          @for (item of carrinho; track item.id; let i = $index) {
             <div class="item">
               <div class="left">
                 <span class="icone-produto icone-produto--sm"><i class="bi" [ngClass]="iconeCategoria(item.produto.categoria?.nome)"></i></span>
-                <span class="nome">{{ item.produto.nome }}</span>
+                <div class="item-info">
+                  <span class="nome">{{ item.produto.nome }}</span>
+                  @if (item.customizacao.composicaoRemovidaIds.length > 0) {
+                    <span class="customizacao-tag">sem alguns itens</span>
+                  }
+                  @for (sel of item.customizacao.adicionaisSelecionados; track sel.adicional.id) {
+                    <span class="customizacao-tag">+ {{ sel.adicional.nome }}</span>
+                  }
+                  @if (item.customizacao.observacao) {
+                    <span class="customizacao-obs">"{{ item.customizacao.observacao }}"</span>
+                  }
+                </div>
               </div>
 
               <div class="right">
@@ -86,7 +97,7 @@
                   <button (click)="aumentarQtd(i)">+</button>
                 </div>
 
-                <span class="preco"> R$ {{ (item.produto.preco * item.qtd).toFixed(2) }} </span>
+                <span class="preco"> R$ {{ (precoUnitario(item) * item.qtd).toFixed(2) }} </span>
               </div>
             </div>
           }
@@ -112,7 +123,7 @@
         <app-modal-produto
           [produto]="produtoSelecionado"
           (fechar)="fecharModal()"
-          (adicionar)="adicionarAoCarrinho($event)"
+          (adicionar)="aoAdicionarDoModal($event)"
         >
         </app-modal-produto>
       }

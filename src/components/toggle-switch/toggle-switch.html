@@ -1,0 +1,13 @@
+<label class="switch" [class.disabled]="disabled" [for]="inputId">
+  <input
+    [id]="inputId"
+    type="checkbox"
+    [checked]="checked"
+    [disabled]="disabled"
+    (change)="alternar()"
+  />
+  <span class="slider"></span>
+  @if (label) {
+    <span class="label-text">{{ label }}</span>
+  }
+</label>

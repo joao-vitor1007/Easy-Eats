@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-export type Perfil = 'SUPERADMIN' | 'ADMINISTRADOR' | 'OPERADOR' | 'GARCOM';
+export type Perfil = 'SUPERADMIN' | 'ADMINISTRADOR' | 'OPERADOR' | 'GARCOM' | 'COZINHEIRO';
 
 export type Funcionalidade =
   | 'OPERACAO'
@@ -16,7 +16,9 @@ export type Funcionalidade =
   | 'PRODUTOS'
   | 'CLIENTES'
   | 'USUARIOS'
-  | 'CONFIGURACOES';
+  | 'CONFIGURACOES'
+  | 'CAIXA'
+  | 'CUPONS';
 
 export interface UsuarioLogado {
   id: number;
@@ -86,6 +88,14 @@ export class AuthService {
 
   isGarcom(): boolean {
     return this.usuario()?.role === 'GARCOM';
+  }
+
+  isCozinheiro(): boolean {
+    return this.usuario()?.role === 'COZINHEIRO';
+  }
+
+  isOperador(): boolean {
+    return this.usuario()?.role === 'OPERADOR';
   }
 
   temFuncionalidade(codigo: Funcionalidade): boolean {

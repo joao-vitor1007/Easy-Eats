@@ -159,10 +159,10 @@
   align-items: center;
   gap: 8px;
 
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #dc2626;
-  border-radius: 7px;
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  color: var(--color-danger-text);
+  border-radius: var(--radius-md);
   padding: 10px 12px;
   font-size: 13px;
   font-weight: 500;
@@ -174,12 +174,12 @@
   margin: 0;
   font-size: 22px;
   font-weight: 800;
-  color: #111827;
+  color: var(--color-text);
 }
 
 .cabecalho-form p {
   margin: 6px 0 0;
-  color: #6b7280;
+  color: var(--color-text-muted);
   font-size: 14px;
 }
 
@@ -206,7 +206,7 @@ label {
   background: none;
   border: none;
   padding: 0;
-  color: #ea580c;
+  color: var(--color-primary);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
@@ -226,66 +226,18 @@ label {
   padding: 0;
   margin-bottom: 20px;
 
-  color: #6b7280;
+  color: var(--color-text-muted);
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
 }
 
 .link-voltar:hover {
-  color: #111827;
-}
-
-.input-icone {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.input-icone i:first-child {
-  position: absolute;
-  left: 14px;
-  color: #9ca3af;
-  font-size: 15px;
-}
-
-.input-icone input {
-  width: 100%;
-  padding: 12px 14px 12px 40px;
-  border: 1px solid #e5e7eb;
-  border-radius: 7px;
-  font-size: 14.5px;
-  transition: all 0.2s ease;
-  box-sizing: border-box;
-  background-color: #fafafa;
-}
-
-.input-icone input:focus {
-  outline: none;
-  border-color: #f97316;
-  background-color: #fff;
-  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.12);
-}
-
-.btn-mostrar-senha {
-  position: absolute;
-  right: 12px;
-
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-
-  color: #9ca3af;
-  font-size: 16px;
-}
-
-.btn-mostrar-senha:hover {
-  color: #374151;
+  color: var(--color-text);
 }
 
 .msg-validacoes {
-  color: #dc2626;
+  color: var(--color-danger-text);
   font-size: 12.5px;
   font-weight: 500;
   margin: 6px 0 0;
@@ -300,12 +252,12 @@ label {
   justify-content: center;
   gap: 8px;
 
-  background: #ea580c;
+  background: var(--color-primary);
   border: none;
   color: white;
   font-size: 15px;
   font-weight: 700;
-  border-radius: 7px;
+  border-radius: var(--radius-md);
   cursor: pointer;
 
   box-shadow: none;
@@ -318,9 +270,9 @@ label {
 }
 
 .confirmacao-envio {
-  background: #ecfdf5;
-  border: 1px solid #bbf7d0;
-  border-radius: 8px;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  border-radius: var(--radius-lg);
   padding: 20px;
 
   display: flex;
@@ -332,7 +284,7 @@ label {
 
 .confirmacao-envio i {
   font-size: 30px;
-  color: #16a34a;
+  color: var(--color-success-text);
 }
 
 .confirmacao-envio p {
@@ -346,7 +298,7 @@ label {
   margin-top: 28px;
   text-align: center;
   font-size: 12px;
-  color: #9ca3af;
+  color: var(--color-text-subtle);
 }
 
 @media (max-width: 900px) {

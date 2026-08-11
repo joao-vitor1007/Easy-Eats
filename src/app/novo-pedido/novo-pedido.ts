@@ -1,13 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { ModalProdutoComponent } from '../../components/modal-produto/modalProduto';
+import { CarregandoComponent } from '../../components/carregando/carregando';
 import { AuthService } from '../auth/auth.service';
 import { Produto, ProdutoService } from '../cadastro-produto/produto.service';
+import { ItemComandaPayload, Comanda, ComandaService } from '../comandas/comanda.service';
 import { Mesa, MesaService } from '../mesas/mesa.service';
+import { CustomizacaoProduto, customizacaoVazia, mesmaCustomizacao } from './carrinho.model';
 import { ItemVendaService } from './item-venda.service';
 import { STATUS_PEDIDO, VendaService } from './venda.service';
+import { MensagemErroApiUtil } from '../utils/mensagemErroApiUtil';
 
 const ICONE_POR_CATEGORIA: Record<string, string> = {
   Lanches: 'bi-egg-fried',
@@ -16,14 +21,18 @@ const ICONE_POR_CATEGORIA: Record<string, string> = {
 };
 
 interface ItemCarrinho {
+  id: number;
   produto: Produto;
   qtd: number;
+  customizacao: CustomizacaoProduto;
 }
+
+let proximoIdCarrinho = 0;
 
 @Component({
   selector: 'app-novo-pedido',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalProdutoComponent],
+  imports: [CommonModule, FormsModule, ModalProdutoComponent, CarregandoComponent],
   templateUrl: './novo-pedido.html',
   styleUrls: ['./novo-pedido.scss'],
 })
@@ -32,6 +41,8 @@ export class NovoPedido implements OnInit {
   private mesaService = inject(MesaService);
   private vendaService = inject(VendaService);
   private itemVendaService = inject(ItemVendaService);
+  private comandaService = inject(ComandaService);
+  private route = inject(ActivatedRoute);
   protected authService = inject(AuthService);
 
   cliente = '';
@@ -39,6 +50,10 @@ export class NovoPedido implements OnInit {
 
   produtos: Produto[] = [];
   mesas: Mesa[] = [];
+
+  // Mesa -> comanda aberta, para lançar o pedido nela em vez de criar uma
+  // Venda solta (ver mesas.ts, que já abre a comanda antes de chegar aqui).
+  private comandaPorMesa = new Map<number, Comanda>();
 
   categorias: string[] = ['Todos'];
   categoriaSelecionada = 'Todos';
@@ -73,6 +88,15 @@ export class NovoPedido implements OnInit {
 
     if (this.usaMesa) {
       this.mesaService.listar().subscribe((mesas) => (this.mesas = mesas));
+
+      this.comandaService.listar('ABERTA').subscribe((comandas) => {
+        this.comandaPorMesa = new Map(comandas.map((comanda) => [comanda.mesa.id, comanda]));
+
+        const mesaDaRota = Number(this.route.snapshot.queryParamMap.get('mesa'));
+        if (mesaDaRota) {
+          this.mesaSelecionada = mesaDaRota;
+        }
+      });
     }
   }
 
@@ -90,14 +114,28 @@ export class NovoPedido implements OnInit {
     return this.produtos.filter((p) => p.categoria?.nome === this.categoriaSelecionada);
   }
 
-  adicionarAoCarrinho(produto: Produto) {
-    const itemExistente = this.carrinho.find((item) => item.produto.id === produto.id);
+  adicionarAoCarrinho(produto: Produto, customizacao: CustomizacaoProduto = customizacaoVazia()) {
+    const itemExistente = this.carrinho.find(
+      (item) => item.produto.id === produto.id && mesmaCustomizacao(item.customizacao, customizacao),
+    );
 
     if (itemExistente) {
       itemExistente.qtd++;
     } else {
-      this.carrinho.push({ produto, qtd: 1 });
+      this.carrinho.push({ id: proximoIdCarrinho++, produto, qtd: 1, customizacao });
     }
+  }
+
+  aoAdicionarDoModal(evento: { produto: Produto; customizacao: CustomizacaoProduto }) {
+    this.adicionarAoCarrinho(evento.produto, evento.customizacao);
+  }
+
+  precoUnitario(item: ItemCarrinho): number {
+    const totalAdicionais = item.customizacao.adicionaisSelecionados.reduce(
+      (soma, sel) => soma + sel.adicional.preco * sel.quantidade,
+      0,
+    );
+    return item.produto.preco + totalAdicionais;
   }
 
   aumentarQtd(index: number) {
@@ -113,7 +151,7 @@ export class NovoPedido implements OnInit {
   }
 
   total(): number {
-    return this.carrinho.reduce((soma, item) => soma + item.produto.preco * item.qtd, 0);
+    return this.carrinho.reduce((soma, item) => soma + this.precoUnitario(item) * item.qtd, 0);
   }
 
   podeFinalizar(): boolean {
@@ -135,6 +173,24 @@ export class NovoPedido implements OnInit {
     this.enviando = true;
     this.erro = null;
 
+    const comandaAberta = this.mesaSelecionada ? this.comandaPorMesa.get(this.mesaSelecionada) : undefined;
+
+    if (comandaAberta) {
+      this.comandaService
+        .adicionarItens(comandaAberta.id, usuarioId, this.carrinho.map((item) => this.paraPayloadComanda(item)))
+        .subscribe({
+          next: () => this.finalizarComSucesso(),
+          error: (erro) => {
+            this.enviando = false;
+            this.erro = MensagemErroApiUtil.extrair(
+              erro,
+              'Não foi possível lançar os itens na comanda. Tente novamente.',
+            );
+          },
+        });
+      return;
+    }
+
     const mesa = this.usaMesa && this.mesaSelecionada ? { id: this.mesaSelecionada } : null;
 
     this.vendaService
@@ -147,9 +203,9 @@ export class NovoPedido implements OnInit {
       })
       .subscribe({
         next: (venda) => this.enviarItens(venda.id),
-        error: () => {
+        error: (erro) => {
           this.enviando = false;
-          this.erro = 'Não foi possível criar o pedido. Tente novamente.';
+          this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível criar o pedido. Tente novamente.');
         },
       });
   }
@@ -158,27 +214,44 @@ export class NovoPedido implements OnInit {
     const chamadas = this.carrinho.map((item) =>
       this.itemVendaService.criar({
         venda: { id: vendaId },
-        produto: { id: item.produto.id },
-        quantidade: item.qtd,
-        preco_unitario: item.produto.preco,
-        valor_total: item.produto.preco * item.qtd,
+        ...this.paraPayloadComanda(item),
       }),
     );
 
     forkJoin(chamadas).subscribe({
-      next: () => {
+      next: () => this.finalizarComSucesso(),
+      error: (erro) => {
         this.enviando = false;
-        this.sucesso = true;
-        this.carrinho = [];
-        this.cliente = '';
-        this.mesaSelecionada = null;
-        setTimeout(() => (this.sucesso = false), 4000);
-      },
-      error: () => {
-        this.enviando = false;
-        this.erro = 'O pedido foi criado, mas houve um problema ao salvar os itens.';
+        this.erro = MensagemErroApiUtil.extrair(
+          erro,
+          'O pedido foi criado, mas houve um problema ao salvar os itens.',
+        );
       },
     });
+  }
+
+  private paraPayloadComanda(item: ItemCarrinho): ItemComandaPayload {
+    return {
+      produto: { id: item.produto.id },
+      quantidade: item.qtd,
+      preco_unitario: this.precoUnitario(item),
+      valor_total: this.precoUnitario(item) * item.qtd,
+      observacao: item.customizacao.observacao || null,
+      composicaoRemovida: item.customizacao.composicaoRemovidaIds.map((id) => ({ composicaoItem: { id } })),
+      adicionais: item.customizacao.adicionaisSelecionados.map((sel) => ({
+        adicional: { id: sel.adicional.id },
+        quantidade: sel.quantidade,
+      })),
+    };
+  }
+
+  private finalizarComSucesso() {
+    this.enviando = false;
+    this.sucesso = true;
+    this.carrinho = [];
+    this.cliente = '';
+    this.mesaSelecionada = null;
+    setTimeout(() => (this.sucesso = false), 4000);
   }
 
   abrirDetalhes(produto: Produto) {

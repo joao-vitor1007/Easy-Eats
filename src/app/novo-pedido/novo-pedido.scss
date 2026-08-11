@@ -52,11 +52,6 @@
   margin-bottom: 16px;
 }
 
-.carregando {
-  color: #9ca3af;
-  font-size: 14px;
-}
-
 .dados-pedido {
   display: flex;
   gap: 10px;
@@ -272,14 +267,32 @@
 
 .left {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 10px;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .nome {
   font-size: 13.5px;
   color: #374151;
   font-weight: 600;
+}
+
+.customizacao-tag {
+  font-size: 11px;
+  color: #ea580c;
+  font-weight: 500;
+}
+
+.customizacao-obs {
+  font-size: 11px;
+  color: #9ca3af;
+  font-style: italic;
 }
 
 .right {

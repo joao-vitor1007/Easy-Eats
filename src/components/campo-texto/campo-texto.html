@@ -1,0 +1,16 @@
+<div class="campo-texto" [class.com-icone]="icone">
+  @if (icone) {
+    <i class="bi" [ngClass]="icone" aria-hidden="true"></i>
+  }
+
+  <input
+    [id]="inputId"
+    [type]="type"
+    [placeholder]="placeholder"
+    [value]="valor"
+    [disabled]="desabilitado"
+    [attr.autocomplete]="autocomplete"
+    (input)="aoDigitar($any($event.target).value)"
+    (blur)="aoTocar()"
+  />
+</div>
