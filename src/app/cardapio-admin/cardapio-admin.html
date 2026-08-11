@@ -1,0 +1,94 @@
+<div class="pagina">
+  <header class="topo">
+    <h1>Cardápio Digital</h1>
+    <p>Monte o cardápio que será exibido no link público para o cliente</p>
+  </header>
+
+  @if (erro) {
+    <p class="vazio">{{ erro }}</p>
+  }
+
+  <div class="colunas">
+    <section class="painel coluna-cardapios">
+      <h3>Cardápios</h3>
+
+      <div class="novo-cardapio">
+        <input type="text" placeholder="Nome do cardápio (ex.: Salão)" [(ngModel)]="nomeNovoCardapio" />
+        <button type="button" (click)="criarCardapio()">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </div>
+
+      @if (carregando) {
+        <p class="vazio">Carregando...</p>
+      } @else {
+        <div class="lista-cardapios">
+          @for (cardapio of cardapios; track cardapio.id) {
+            <button
+              type="button"
+              class="item-cardapio-lista"
+              [class.selecionado]="cardapioSelecionado?.id === cardapio.id"
+              (click)="selecionarCardapio(cardapio)"
+            >
+              <span>{{ cardapio.nome }}</span>
+              @if (cardapio.padrao) {
+                <span class="badge sucesso">Padrão</span>
+              }
+            </button>
+          } @empty {
+            <p class="vazio">Nenhum cardápio criado ainda.</p>
+          }
+        </div>
+      }
+    </section>
+
+    <section class="painel coluna-itens">
+      @if (!cardapioSelecionado) {
+        <p class="vazio">Selecione ou crie um cardápio para montar os itens.</p>
+      } @else {
+        <div class="cabecalho-itens">
+          <h3>Itens de "{{ cardapioSelecionado.nome }}"</h3>
+          @if (!cardapioSelecionado.padrao) {
+            <button type="button" class="btn-secundario" (click)="marcarPadrao(cardapioSelecionado)">
+              Marcar como padrão do link público
+            </button>
+          }
+        </div>
+
+        <div class="lista-itens">
+          @for (item of itens; track item.id) {
+            <div class="linha-item">
+              <div class="info">
+                <strong>{{ item.produto.nome }}</strong>
+                <span>{{ item.precoOverride ?? item.produto.preco | currency: 'BRL' }}</span>
+              </div>
+              <div class="acoes">
+                <label class="toggle">
+                  <input type="checkbox" [checked]="item.disponivel" (change)="alternarDisponibilidade(item)" />
+                  Disponível
+                </label>
+                <button type="button" class="btn-remover" (click)="removerItem(item)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <p class="vazio">Nenhum produto adicionado a este cardápio.</p>
+          }
+        </div>
+
+        <h4>Adicionar produto</h4>
+        <div class="lista-produtos-disponiveis">
+          @for (produto of produtosDisponiveisParaAdicionar(); track produto.id) {
+            <button type="button" class="chip-produto" (click)="adicionarProduto(produto)">
+              <i class="bi bi-plus-lg"></i>
+              {{ produto.nome }}
+            </button>
+          } @empty {
+            <p class="vazio">Todos os produtos já estão neste cardápio.</p>
+          }
+        </div>
+      }
+    </section>
+  </div>
+</div>

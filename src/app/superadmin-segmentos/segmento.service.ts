@@ -26,6 +26,8 @@ export const FUNCIONALIDADE_LABELS: Record<Funcionalidade, string> = {
   CLIENTES: 'Clientes e fidelidade',
   USUARIOS: 'Usuários e acessos',
   CONFIGURACOES: 'Configurações',
+  CAIXA: 'Frente de caixa',
+  CUPONS: 'Cupons e cashback',
 };
 
 const API_URL = `${environment.apiUrl}/segmentos`;

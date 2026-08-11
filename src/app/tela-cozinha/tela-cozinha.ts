@@ -1,9 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Subscription, interval } from 'rxjs';
-import { STATUS_PEDIDO, Venda, VendaService } from '../novo-pedido/venda.service';
+import { ItemVendaResumo, STATUS_PEDIDO, Venda, VendaService } from '../novo-pedido/venda.service';
 
 const INTERVALO_ATUALIZACAO_MS = 10000;
+
+export interface ItemCozinha {
+  texto: string;
+  removidos: string[];
+  adicionais: string[];
+  observacao: string | null;
+}
 
 @Component({
   selector: 'app-tela-cozinha',
@@ -66,8 +73,19 @@ export class TelaCozinha implements OnInit, OnDestroy {
     return venda.nomeCliente || 'Balcão';
   }
 
-  itensResumo(venda: Venda): string[] {
-    return (venda.itens ?? []).map((item) => `${item.produto?.nome ?? 'Item'} x${item.quantidade}`);
+  itensResumo(venda: Venda): ItemCozinha[] {
+    return (venda.itens ?? []).map((item) => this.detalhesItem(item));
+  }
+
+  private detalhesItem(item: ItemVendaResumo): ItemCozinha {
+    return {
+      texto: `${item.produto?.nome ?? 'Item'} x${item.quantidade}`,
+      removidos: (item.composicaoRemovida ?? []).map((r) => r.composicaoItem.nome),
+      adicionais: (item.adicionais ?? []).map((a) =>
+        a.quantidade > 1 ? `${a.nome} x${a.quantidade}` : a.nome,
+      ),
+      observacao: item.observacao || null,
+    };
   }
 
   avancar(venda: Venda) {

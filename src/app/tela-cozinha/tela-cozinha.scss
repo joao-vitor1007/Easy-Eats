@@ -190,9 +190,45 @@
 }
 
 .cartao li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
   font-size: 13px;
   color: #4b5563;
-  margin-bottom: 2px;
+  margin-bottom: 8px;
+}
+
+.cartao li:last-child {
+  margin-bottom: 0;
+}
+
+.item-nome {
+  font-weight: 600;
+  color: #111827;
+}
+
+.item-removido,
+.item-adicional,
+.item-obs {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.item-removido {
+  color: #dc2626;
+}
+
+.item-adicional {
+  color: #16a34a;
+}
+
+.item-obs {
+  color: #b45309;
+  font-style: italic;
 }
 
 .vazio {

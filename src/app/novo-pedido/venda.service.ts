@@ -18,6 +18,9 @@ export interface ItemVendaResumo {
   quantidade: number;
   preco_unitario: number;
   valor_total: number | null;
+  observacao?: string | null;
+  composicaoRemovida?: { composicaoItem: { id: number; nome: string } }[] | null;
+  adicionais?: { id: number; nome: string; preco: number; quantidade: number }[] | null;
   produto: Produto;
 }
 

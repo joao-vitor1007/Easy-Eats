@@ -1,0 +1,92 @@
+<div class="pagina">
+  <header class="topo">
+    <h1>Frente de Caixa</h1>
+    <p>Abertura, fechamento e movimentações do caixa</p>
+  </header>
+
+  @if (erro) {
+    <p class="vazio">{{ erro }}</p>
+  }
+
+  @if (carregando) {
+    <p class="vazio">Carregando...</p>
+  } @else if (!caixa) {
+    <section class="painel">
+      <h3>Nenhum caixa aberto</h3>
+
+      @if (podeOperar) {
+        <div class="form-linha">
+          <label>Valor inicial</label>
+          <input type="number" step="0.01" [(ngModel)]="valorInicial" placeholder="0,00" />
+        </div>
+        <div class="form-linha">
+          <label>Observações</label>
+          <input type="text" [(ngModel)]="observacoesAbertura" placeholder="Opcional" />
+        </div>
+        <button type="button" class="btn-primario" [disabled]="processando" (click)="abrirCaixa()">
+          Abrir caixa
+        </button>
+      } @else {
+        <p class="vazio">Peça para um administrador ou operador abrir o caixa.</p>
+      }
+    </section>
+  } @else {
+    <div class="grid-stats">
+      <div class="stat-card">
+        <div class="stat-label">Status</div>
+        <div class="stat-valor">
+          <span class="badge sucesso">Aberto</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Valor Inicial</div>
+        <div class="stat-valor">{{ caixa.valorInicial | currency: 'BRL' }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Aberto por</div>
+        <div class="stat-valor pequeno">{{ caixa.usuarioAbertura?.nome ?? '-' }}</div>
+      </div>
+    </div>
+
+    @if (podeOperar) {
+      <section class="painel">
+        <h3>Sangria / Suprimento</h3>
+        <div class="form-linha">
+          <label>Valor</label>
+          <input type="number" step="0.01" [(ngModel)]="valorMovimentacao" placeholder="0,00" />
+        </div>
+        <div class="form-linha">
+          <label>Descrição</label>
+          <input type="text" [(ngModel)]="descricaoMovimentacao" placeholder="Opcional" />
+        </div>
+        <div class="acoes">
+          <button type="button" class="btn-secundario" [disabled]="processando" (click)="registrarMovimentacao('SANGRIA')">
+            Registrar Sangria
+          </button>
+          <button type="button" class="btn-secundario" [disabled]="processando" (click)="registrarMovimentacao('SUPRIMENTO')">
+            Registrar Suprimento
+          </button>
+        </div>
+      </section>
+
+      <section class="painel">
+        <h3>Fechar caixa</h3>
+        <div class="form-linha">
+          <label>Valor apurado</label>
+          <input type="number" step="0.01" [(ngModel)]="valorApuradoInformado" placeholder="0,00" />
+        </div>
+        <div class="form-linha">
+          <label>Observações</label>
+          <input type="text" [(ngModel)]="observacoesFechamento" placeholder="Opcional" />
+        </div>
+        <button type="button" class="btn-primario" [disabled]="processando" (click)="fecharCaixa()">
+          Fechar caixa
+        </button>
+      </section>
+    } @else {
+      <section class="painel">
+        <p class="vazio">Somente administradores e operadores podem fechar o caixa ou lançar sangria/suprimento.</p>
+      </section>
+    }
+  }
+</div>

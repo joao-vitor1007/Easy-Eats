@@ -1,0 +1,113 @@
+<div class="pagina">
+  <header class="topo">
+    <h1>Cupons e Cashback</h1>
+    <p>Configure descontos e o programa de cashback da sua loja</p>
+  </header>
+
+  @if (erro) {
+    <p class="vazio">{{ erro }}</p>
+  }
+
+  <div class="abas">
+    <button type="button" [class.ativa]="abaAtiva === 'cupons'" (click)="abaAtiva = 'cupons'">Cupons</button>
+    <button type="button" [class.ativa]="abaAtiva === 'cashback'" (click)="abaAtiva = 'cashback'">Cashback</button>
+  </div>
+
+  @if (abaAtiva === 'cupons') {
+    <section class="painel">
+      <h3>Novo cupom</h3>
+      <div class="grid-form">
+        <div class="form-linha">
+          <label>Código</label>
+          <input type="text" [(ngModel)]="novoCupom.codigo" placeholder="ex.: BEMVINDO10" />
+        </div>
+        <div class="form-linha">
+          <label>Tipo de desconto</label>
+          <select [(ngModel)]="novoCupom.tipoDesconto">
+            <option value="PERCENTUAL">Percentual (%)</option>
+            <option value="VALOR_FIXO">Valor fixo (R$)</option>
+          </select>
+        </div>
+        <div class="form-linha">
+          <label>Valor</label>
+          <input type="number" step="0.01" [(ngModel)]="novoCupom.valorDesconto" />
+        </div>
+        <div class="form-linha">
+          <label>Pedido mínimo (opcional)</label>
+          <input type="number" step="0.01" [(ngModel)]="novoCupom.valorMinimoPedido" />
+        </div>
+        <div class="form-linha">
+          <label>Limite total de usos (opcional)</label>
+          <input type="number" [(ngModel)]="novoCupom.limiteUsoTotal" />
+        </div>
+        <div class="form-linha">
+          <label>Limite por cliente (opcional)</label>
+          <input type="number" [(ngModel)]="novoCupom.limiteUsoPorCliente" />
+        </div>
+      </div>
+      <button type="button" class="btn-primario" (click)="criarCupom()">Criar cupom</button>
+    </section>
+
+    <section class="painel">
+      <h3>Cupons cadastrados</h3>
+      @if (carregandoCupons) {
+        <p class="vazio">Carregando...</p>
+      } @else {
+        <div class="lista">
+          @for (cupom of cupons; track cupom.id) {
+            <div class="linha">
+              <div class="info">
+                <strong>{{ cupom.codigo }}</strong>
+                <span>
+                  {{ cupom.tipoDesconto === 'PERCENTUAL' ? cupom.valorDesconto + '%' : (cupom.valorDesconto | currency: 'BRL') }}
+                  de desconto
+                  @if (cupom.valorMinimoPedido) {
+                    · pedido mínimo {{ cupom.valorMinimoPedido | currency: 'BRL' }}
+                  }
+                </span>
+              </div>
+              <div class="direita">
+                <span class="badge" [ngClass]="cupom.flAtivo ? 'sucesso' : 'neutro'">
+                  {{ cupom.flAtivo ? 'Ativo' : 'Inativo' }}
+                </span>
+                <button type="button" class="btn-secundario" (click)="alternarAtivo(cupom)">
+                  {{ cupom.flAtivo ? 'Desativar' : 'Ativar' }}
+                </button>
+                <button type="button" class="btn-remover" (click)="excluirCupom(cupom)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          } @empty {
+            <p class="vazio">Nenhum cupom cadastrado ainda.</p>
+          }
+        </div>
+      }
+    </section>
+  }
+
+  @if (abaAtiva === 'cashback') {
+    <section class="painel">
+      <h3>Programa de Cashback</h3>
+      @if (carregandoCashback) {
+        <p class="vazio">Carregando...</p>
+      } @else if (cashback) {
+        <div class="grid-form">
+          <div class="form-linha">
+            <label>Percentual de acúmulo (%)</label>
+            <input type="number" step="0.1" [(ngModel)]="cashback.percentualAcumulo" />
+          </div>
+          <div class="form-linha">
+            <label>Valor mínimo do pedido para acumular (opcional)</label>
+            <input type="number" step="0.01" [(ngModel)]="cashback.valorMinimoParaAcumular" />
+          </div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" [(ngModel)]="cashback.flAtivo" />
+          Programa de cashback ativo
+        </label>
+        <button type="button" class="btn-primario" (click)="salvarCashback()">Salvar</button>
+      }
+    </section>
+  }
+</div>

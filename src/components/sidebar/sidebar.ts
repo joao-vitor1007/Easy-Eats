@@ -53,6 +53,13 @@ export class Sidebar {
       ],
     },
     {
+      label: 'Caixa',
+      icon: 'bi-cash-stack',
+      rota: '/caixa',
+      cor: '#16a34a',
+      funcionalidades: ['CAIXA'],
+    },
+    {
       label: 'Pedido',
       icon: 'bi-cart3',
       rota: null,
@@ -136,6 +143,7 @@ export class Sidebar {
         { label: 'Catálogo', icon: 'bi-grid', rota: '/cadastro-produto', cor: '#4f46e5' },
         { label: 'Categorias', icon: 'bi-tags', rota: '/categorias', cor: '#4f46e5' },
         { label: 'Ficha Técnica', icon: 'bi-clipboard2-data', rota: '/ficha-tecnica', cor: '#4f46e5' },
+        { label: 'Cardápio Digital', icon: 'bi-phone', rota: '/cardapio-admin', cor: '#4f46e5' },
       ],
     },
     {
@@ -147,6 +155,7 @@ export class Sidebar {
       filhos: [
         { label: 'Lista de Clientes', icon: 'bi-person-lines-fill', rota: '/clientes', cor: '#0d9488' },
         { label: 'Fidelidade', icon: 'bi-star', rota: '/fidelidade', cor: '#0d9488' },
+        { label: 'Cupons e Cashback', icon: 'bi-ticket-perforated', rota: '/cupons-cashback', cor: '#0d9488' },
       ],
     },
     {

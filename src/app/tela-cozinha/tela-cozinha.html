@@ -31,7 +31,18 @@
                 </div>
                 <ul>
                   @for (item of itensResumo(venda); track item) {
-                    <li>{{ item }}</li>
+                    <li>
+                      <span class="item-nome">{{ item.texto }}</span>
+                      @if (item.removidos.length) {
+                        <span class="item-removido"><i class="bi bi-dash-circle"></i> Sem {{ item.removidos.join(', ') }}</span>
+                      }
+                      @if (item.adicionais.length) {
+                        <span class="item-adicional"><i class="bi bi-plus-circle"></i> {{ item.adicionais.join(', ') }}</span>
+                      }
+                      @if (item.observacao) {
+                        <span class="item-obs"><i class="bi bi-chat-left-text"></i> {{ item.observacao }}</span>
+                      }
+                    </li>
                   }
                 </ul>
               </div>
@@ -58,7 +69,18 @@
                 </div>
                 <ul>
                   @for (item of itensResumo(venda); track item) {
-                    <li>{{ item }}</li>
+                    <li>
+                      <span class="item-nome">{{ item.texto }}</span>
+                      @if (item.removidos.length) {
+                        <span class="item-removido"><i class="bi bi-dash-circle"></i> Sem {{ item.removidos.join(', ') }}</span>
+                      }
+                      @if (item.adicionais.length) {
+                        <span class="item-adicional"><i class="bi bi-plus-circle"></i> {{ item.adicionais.join(', ') }}</span>
+                      }
+                      @if (item.observacao) {
+                        <span class="item-obs"><i class="bi bi-chat-left-text"></i> {{ item.observacao }}</span>
+                      }
+                    </li>
                   }
                 </ul>
               </div>
@@ -85,7 +107,18 @@
                 </div>
                 <ul>
                   @for (item of itensResumo(venda); track item) {
-                    <li>{{ item }}</li>
+                    <li>
+                      <span class="item-nome">{{ item.texto }}</span>
+                      @if (item.removidos.length) {
+                        <span class="item-removido"><i class="bi bi-dash-circle"></i> Sem {{ item.removidos.join(', ') }}</span>
+                      }
+                      @if (item.adicionais.length) {
+                        <span class="item-adicional"><i class="bi bi-plus-circle"></i> {{ item.adicionais.join(', ') }}</span>
+                      }
+                      @if (item.observacao) {
+                        <span class="item-obs"><i class="bi bi-chat-left-text"></i> {{ item.observacao }}</span>
+                      }
+                    </li>
                   }
                 </ul>
               </div>
