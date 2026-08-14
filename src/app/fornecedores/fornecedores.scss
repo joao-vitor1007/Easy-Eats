@@ -19,6 +19,9 @@
 
 .erro { color: #dc2626; font-size: 12px; margin-top: 4px; }
 
+.campo-checkbox label { display: flex; flex-direction: row; align-items: center; gap: 8px; cursor: pointer; }
+.campo-checkbox input { width: auto; padding: 0; border: none; background: none; }
+
 .acoes-form { display: flex; gap: 8px; }
 
 .btn-salvar { flex: 1; padding: 10px; background: #ea580c; color: white; border: none; border-radius: 7px; font-weight: 600; font-size: 13.5px; cursor: pointer; }

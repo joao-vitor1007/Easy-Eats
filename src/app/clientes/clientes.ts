@@ -1,14 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-
-interface Cliente {
-  id: number;
-  nome: string;
-  telefone: string;
-  email: string;
-  cpf: string;
-}
+import { Cliente, ClienteService } from './cliente.service';
+import { MensagemErroApiUtil } from '../utils/mensagemErroApiUtil';
 
 @Component({
   selector: 'app-clientes',
@@ -17,26 +11,42 @@ interface Cliente {
   templateUrl: './clientes.html',
   styleUrl: './clientes.scss',
 })
-export class Clientes {
+export class Clientes implements OnInit {
   private fb = new FormBuilder();
-  private proximoId = 5;
 
+  clientes: Cliente[] = [];
+  carregando = true;
+  salvando = false;
+  erro: string | null = null;
   editandoId: number | null = null;
   busca = '';
-
-  clientes: Cliente[] = [
-    { id: 1, nome: 'Ana Paula Ferreira', telefone: '(11) 98765-4321', email: 'ana.ferreira@email.com', cpf: '123.456.789-00' },
-    { id: 2, nome: 'Carlos Eduardo Souza', telefone: '(11) 91234-5678', email: 'carlos.souza@email.com', cpf: '' },
-    { id: 3, nome: 'Mariana Costa Lima', telefone: '(11) 99876-1234', email: 'mariana.lima@email.com', cpf: '987.654.321-00' },
-    { id: 4, nome: 'João Pedro Almeida', telefone: '(11) 93456-7890', email: 'joao.almeida@email.com', cpf: '' },
-  ];
 
   form = this.fb.group({
     nome: ['', Validators.required],
     telefone: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    cpf: [''],
+    endereco: [''],
   });
+
+  constructor(private clienteService: ClienteService) {}
+
+  ngOnInit() {
+    this.carregar();
+  }
+
+  carregar() {
+    this.carregando = true;
+    this.clienteService.listar().subscribe({
+      next: (clientes) => {
+        this.clientes = clientes;
+        this.carregando = false;
+      },
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível carregar os clientes.');
+        this.carregando = false;
+      },
+    });
+  }
 
   get clientesFiltrados(): Cliente[] {
     const termo = this.busca.toLowerCase().trim();
@@ -52,28 +62,29 @@ export class Clientes {
       return;
     }
 
-    const { nome, telefone, email, cpf } = this.form.value;
+    const { nome, telefone, email, endereco } = this.form.value;
+    const payload = { nome: nome!, telefone: telefone!, email: email!, endereco: endereco || null };
 
-    if (this.editandoId !== null) {
-      const cliente = this.clientes.find((c) => c.id === this.editandoId);
-      if (cliente) {
-        cliente.nome = nome!;
-        cliente.telefone = telefone!;
-        cliente.email = email!;
-        cliente.cpf = cpf ?? '';
-      }
-      this.editandoId = null;
-    } else {
-      this.clientes.push({
-        id: this.proximoId++,
-        nome: nome!,
-        telefone: telefone!,
-        email: email!,
-        cpf: cpf ?? '',
-      });
-    }
+    this.salvando = true;
+    this.erro = null;
 
-    this.form.reset();
+    const requisicao =
+      this.editandoId !== null
+        ? this.clienteService.atualizar(this.editandoId, payload)
+        : this.clienteService.criar(payload);
+
+    requisicao.subscribe({
+      next: () => {
+        this.salvando = false;
+        this.editandoId = null;
+        this.form.reset();
+        this.carregar();
+      },
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível salvar o cliente.');
+        this.salvando = false;
+      },
+    });
   }
 
   editar(cliente: Cliente) {
@@ -82,7 +93,7 @@ export class Clientes {
       nome: cliente.nome,
       telefone: cliente.telefone,
       email: cliente.email,
-      cpf: cliente.cpf,
+      endereco: cliente.endereco ?? '',
     });
   }
 
@@ -92,8 +103,15 @@ export class Clientes {
   }
 
   excluir(cliente: Cliente) {
-    if (confirm(`Excluir o cliente "${cliente.nome}"?`)) {
-      this.clientes = this.clientes.filter((c) => c.id !== cliente.id);
+    if (!confirm(`Excluir o cliente "${cliente.nome}"?`)) {
+      return;
     }
+
+    this.clienteService.excluir(cliente.id).subscribe({
+      next: () => this.carregar(),
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível excluir o cliente.');
+      },
+    });
   }
 }

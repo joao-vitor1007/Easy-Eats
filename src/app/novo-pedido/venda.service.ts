@@ -43,6 +43,12 @@ export interface VendaPayload {
   usuario: { id: number };
 }
 
+export interface ProdutoRanking {
+  nomeProduto: string;
+  quantidadeVendida: number;
+  faturamentoTotal: number;
+}
+
 const API_URL = `${environment.apiUrl}/venda`;
 
 @Injectable({ providedIn: 'root' })
@@ -59,5 +65,9 @@ export class VendaService {
 
   atualizarStatus(id: number, status: string, tipo: string, usuarioId: number): Observable<Venda> {
     return this.http.put<Venda>(`${API_URL}/${id}`, { status, tipo, usuario: { id: usuarioId } });
+  }
+
+  ranking(): Observable<ProdutoRanking[]> {
+    return this.http.get<ProdutoRanking[]>(`${API_URL}/ranking`);
   }
 }

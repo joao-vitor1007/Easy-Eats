@@ -172,6 +172,11 @@
   white-space: nowrap;
 }
 
+.badge.ativo { background: #ecfdf5; color: #16a34a; }
+
+.campo-checkbox label { display: flex; flex-direction: row; align-items: center; gap: 8px; cursor: pointer; }
+.campo-checkbox input { width: auto; padding: 0; border: none; background: none; }
+
 .btn-icone {
   width: 28px;
   height: 28px;

@@ -1,13 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-
-interface Categoria {
-  id: number;
-  nome: string;
-  descricao: string;
-  produtosVinculados: number;
-}
+import { Categoria, CategoriaService } from './categoria.service';
+import { MensagemErroApiUtil } from '../utils/mensagemErroApiUtil';
 
 @Component({
   selector: 'app-categorias',
@@ -16,23 +11,40 @@ interface Categoria {
   templateUrl: './categorias.html',
   styleUrl: './categorias.scss',
 })
-export class Categorias {
+export class Categorias implements OnInit {
   private fb = new FormBuilder();
-  private proximoId = 5;
 
+  categorias: Categoria[] = [];
+  carregando = true;
+  salvando = false;
+  erro: string | null = null;
   editandoId: number | null = null;
-
-  categorias: Categoria[] = [
-    { id: 1, nome: 'Lanches', descricao: 'Hambúrgueres, hot dogs e sanduíches', produtosVinculados: 6 },
-    { id: 2, nome: 'Bebidas', descricao: 'Refrigerantes, sucos e água', produtosVinculados: 5 },
-    { id: 3, nome: 'Acompanhamentos', descricao: 'Porções e extras', produtosVinculados: 3 },
-    { id: 4, nome: 'Sobremesas', descricao: 'Doces e milk shakes', produtosVinculados: 1 },
-  ];
 
   form = this.fb.group({
     nome: ['', Validators.required],
     descricao: [''],
+    flativo: [true],
   });
+
+  constructor(private categoriaService: CategoriaService) {}
+
+  ngOnInit() {
+    this.carregar();
+  }
+
+  carregar() {
+    this.carregando = true;
+    this.categoriaService.listar().subscribe({
+      next: (categorias) => {
+        this.categorias = categorias;
+        this.carregando = false;
+      },
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível carregar as categorias.');
+        this.carregando = false;
+      },
+    });
+  }
 
   salvar() {
     if (this.form.invalid) {
@@ -40,45 +52,58 @@ export class Categorias {
       return;
     }
 
-    const { nome, descricao } = this.form.value;
+    const { nome, descricao, flativo } = this.form.value;
+    const payload = { nome: nome!, descricao: descricao || null, flativo: flativo ?? true };
 
-    if (this.editandoId !== null) {
-      const categoria = this.categorias.find((c) => c.id === this.editandoId);
-      if (categoria) {
-        categoria.nome = nome!;
-        categoria.descricao = descricao ?? '';
-      }
-      this.editandoId = null;
-    } else {
-      this.categorias.push({
-        id: this.proximoId++,
-        nome: nome!,
-        descricao: descricao ?? '',
-        produtosVinculados: 0,
-      });
-    }
+    this.salvando = true;
+    this.erro = null;
 
-    this.form.reset();
+    const requisicao =
+      this.editandoId !== null
+        ? this.categoriaService.atualizar(this.editandoId, payload)
+        : this.categoriaService.criar(payload);
+
+    requisicao.subscribe({
+      next: () => {
+        this.salvando = false;
+        this.editandoId = null;
+        this.form.reset({ flativo: true });
+        this.carregar();
+      },
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível salvar a categoria.');
+        this.salvando = false;
+      },
+    });
   }
 
   editar(categoria: Categoria) {
     this.editandoId = categoria.id;
-    this.form.setValue({ nome: categoria.nome, descricao: categoria.descricao });
+    this.form.setValue({
+      nome: categoria.nome,
+      descricao: categoria.descricao ?? '',
+      flativo: categoria.flativo ?? true,
+    });
   }
 
   cancelarEdicao() {
     this.editandoId = null;
-    this.form.reset();
+    this.form.reset({ flativo: true });
   }
 
   excluir(categoria: Categoria) {
-    if (categoria.produtosVinculados > 0) {
-      alert(`Não é possível excluir "${categoria.nome}": há ${categoria.produtosVinculados} produto(s) vinculado(s).`);
+    if (!confirm(`Excluir a categoria "${categoria.nome}"?`)) {
       return;
     }
 
-    if (confirm(`Excluir a categoria "${categoria.nome}"?`)) {
-      this.categorias = this.categorias.filter((c) => c.id !== categoria.id);
-    }
+    this.categoriaService.excluir(categoria.id).subscribe({
+      next: () => this.carregar(),
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(
+          erro,
+          'Não foi possível excluir a categoria. Verifique se ainda há produtos vinculados a ela.',
+        );
+      },
+    });
   }
 }

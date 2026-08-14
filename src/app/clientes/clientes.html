@@ -4,6 +4,10 @@
     <p>Cadastre e gerencie os clientes do estabelecimento</p>
   </header>
 
+  @if (erro) {
+    <p class="vazio">{{ erro }}</p>
+  }
+
   <div class="grid-duas-colunas">
     <section class="painel">
       <h3>{{ editandoId !== null ? 'Editar Cliente' : 'Novo Cliente' }}</h3>
@@ -37,12 +41,12 @@
         </div>
 
         <div class="campo">
-          <label>CPF (opcional)</label>
-          <input type="text" placeholder="000.000.000-00" formControlName="cpf" />
+          <label>Endereço (opcional)</label>
+          <input type="text" placeholder="Rua, número, bairro" formControlName="endereco" />
         </div>
 
         <div class="acoes-form">
-          <button type="submit" class="btn-salvar">
+          <button type="submit" class="btn-salvar" [disabled]="salvando">
             {{ editandoId !== null ? 'Salvar Alterações' : 'Adicionar Cliente' }}
           </button>
 
@@ -60,30 +64,34 @@
         <input type="text" placeholder="Buscar por nome..." [(ngModel)]="busca" [ngModelOptions]="{ standalone: true }" />
       </div>
 
-      <div class="lista">
-        @for (cliente of clientesFiltrados; track cliente.id) {
-          <div class="linha">
-            <div class="info">
-              <strong>{{ cliente.nome }}</strong>
-              <span>{{ cliente.telefone }} · {{ cliente.email }}</span>
-            </div>
+      @if (carregando) {
+        <p class="vazio">Carregando clientes...</p>
+      } @else {
+        <div class="lista">
+          @for (cliente of clientesFiltrados; track cliente.id) {
+            <div class="linha">
+              <div class="info">
+                <strong>{{ cliente.nome }}</strong>
+                <span>{{ cliente.telefone }} · {{ cliente.email }}</span>
+              </div>
 
-            <div class="direita">
-              @if (cliente.cpf) {
-                <span class="badge">{{ cliente.cpf }}</span>
-              }
-              <button type="button" class="btn-icone" (click)="editar(cliente)" title="Editar">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button type="button" class="btn-icone" (click)="excluir(cliente)" title="Excluir">
-                <i class="bi bi-trash"></i>
-              </button>
+              <div class="direita">
+                @if (cliente.saldoCashback) {
+                  <span class="badge">{{ cliente.saldoCashback | currency: 'BRL' }} cashback</span>
+                }
+                <button type="button" class="btn-icone" (click)="editar(cliente)" title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button type="button" class="btn-icone" (click)="excluir(cliente)" title="Excluir">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
             </div>
-          </div>
-        } @empty {
-          <p class="vazio">Nenhum cliente encontrado.</p>
-        }
-      </div>
+          } @empty {
+            <p class="vazio">Nenhum cliente encontrado.</p>
+          }
+        </div>
+      }
     </section>
   </div>
 </div>

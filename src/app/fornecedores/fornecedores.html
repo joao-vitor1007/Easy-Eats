@@ -4,6 +4,10 @@
     <p>Cadastre e gerencie os fornecedores do estabelecimento</p>
   </header>
 
+  @if (erro) {
+    <p class="vazio">{{ erro }}</p>
+  }
+
   <div class="grid-duas-colunas">
     <section class="painel">
       <h3>{{ editandoId !== null ? 'Editar Fornecedor' : 'Novo Fornecedor' }}</h3>
@@ -18,23 +22,35 @@
         </div>
 
         <div class="campo">
-          <label>Telefone / Contato</label>
-          <input type="text" placeholder="Ex: (11) 98765-4321" formControlName="contato" />
-          @if (form.get('contato')?.touched && form.get('contato')?.errors?.['required']) {
-            <small class="erro">Contato é obrigatório.</small>
+          <label>CNPJ</label>
+          <input type="text" placeholder="00.000.000/0001-00" formControlName="cnpj" />
+          @if (form.get('cnpj')?.touched && form.get('cnpj')?.errors?.['required']) {
+            <small class="erro">CNPJ é obrigatório.</small>
           }
         </div>
 
         <div class="campo">
-          <label>Categoria de Fornecimento</label>
-          <input type="text" placeholder="Ex: Carnes, Bebidas, Embalagens" formControlName="categoria" />
-          @if (form.get('categoria')?.touched && form.get('categoria')?.errors?.['required']) {
-            <small class="erro">Categoria é obrigatória.</small>
+          <label>Telefone (opcional)</label>
+          <input type="text" placeholder="(11) 98765-4321" formControlName="telefone" />
+        </div>
+
+        <div class="campo">
+          <label>Email (opcional)</label>
+          <input type="email" placeholder="contato@fornecedor.com" formControlName="email" />
+          @if (form.get('email')?.touched && form.get('email')?.errors?.['email']) {
+            <small class="erro">Email inválido.</small>
           }
         </div>
 
+        <div class="campo campo-checkbox">
+          <label>
+            <input type="checkbox" formControlName="flAtivo" />
+            Fornecedor ativo
+          </label>
+        </div>
+
         <div class="acoes-form">
-          <button type="submit" class="btn-salvar">
+          <button type="submit" class="btn-salvar" [disabled]="salvando">
             {{ editandoId !== null ? 'Salvar Alterações' : 'Adicionar Fornecedor' }}
           </button>
 
@@ -48,28 +64,34 @@
     <section class="painel">
       <h3>Fornecedores Cadastrados</h3>
 
-      <div class="lista">
-        @for (fornecedor of fornecedores; track fornecedor.id) {
-          <div class="linha">
-            <div class="info">
-              <strong>{{ fornecedor.nome }}</strong>
-              <span>{{ fornecedor.contato }}</span>
-            </div>
+      @if (carregando) {
+        <p class="vazio">Carregando fornecedores...</p>
+      } @else {
+        <div class="lista">
+          @for (fornecedor of fornecedores; track fornecedor.id) {
+            <div class="linha">
+              <div class="info">
+                <strong>{{ fornecedor.nome }}</strong>
+                <span>{{ fornecedor.cnpj }}@if (fornecedor.telefone) { · {{ fornecedor.telefone }} }</span>
+              </div>
 
-            <div class="direita">
-              <span class="badge neutro">{{ fornecedor.categoria }}</span>
-              <button type="button" class="btn-icone" (click)="editar(fornecedor)" title="Editar">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button type="button" class="btn-icone" (click)="excluir(fornecedor)" title="Excluir">
-                <i class="bi bi-trash"></i>
-              </button>
+              <div class="direita">
+                <span class="badge" [class.sucesso]="fornecedor.flAtivo" [class.neutro]="!fornecedor.flAtivo">
+                  {{ fornecedor.flAtivo ? 'Ativo' : 'Inativo' }}
+                </span>
+                <button type="button" class="btn-icone" (click)="editar(fornecedor)" title="Editar">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button type="button" class="btn-icone" (click)="excluir(fornecedor)" title="Excluir">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
             </div>
-          </div>
-        } @empty {
-          <p class="vazio">Nenhum fornecedor cadastrado.</p>
-        }
-      </div>
+          } @empty {
+            <p class="vazio">Nenhum fornecedor cadastrado.</p>
+          }
+        </div>
+      }
     </section>
   </div>
 </div>
