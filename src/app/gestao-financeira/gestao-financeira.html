@@ -4,13 +4,38 @@
     <p>Acompanhe todos os lançamentos financeiros do negócio</p>
   </header>
 
+  <div class="filtros">
+    <button type="button" [class.ativo]="filtroPeriodo === 'hoje'" (click)="selecionarFiltroPeriodo('hoje')">Hoje</button>
+    <button type="button" [class.ativo]="filtroPeriodo === 'semana'" (click)="selecionarFiltroPeriodo('semana')">7 dias</button>
+    <button type="button" [class.ativo]="filtroPeriodo === 'mes'" (click)="selecionarFiltroPeriodo('mes')">30 dias</button>
+    <button type="button" [class.ativo]="filtroPeriodo === 'periodo'" (click)="selecionarFiltroPeriodo('periodo')">Período</button>
+  </div>
+
+  @if (filtroPeriodo === 'periodo') {
+    <div class="form-periodo">
+      <div class="form-linha">
+        <label>De</label>
+        <input type="date" [(ngModel)]="dataInicioCustom" />
+      </div>
+      <div class="form-linha">
+        <label>Até</label>
+        <input type="date" [(ngModel)]="dataFimCustom" />
+      </div>
+      <button type="button" class="btn-primario" (click)="carregar()">Aplicar</button>
+    </div>
+  }
+
+  @if (erro) {
+    <p class="vazio erro">{{ erro }}</p>
+  }
+
   <div class="grid-stats">
     <div class="stat-card">
-      <div class="stat-label">Total de Ganhos</div>
+      <div class="stat-label">Total de Entradas</div>
       <div class="stat-valor sucesso">R$ {{ totalGanhos | number: '1.2-2' }}</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Total de Gastos</div>
+      <div class="stat-label">Total de Saídas</div>
       <div class="stat-valor alerta">R$ {{ totalGastos | number: '1.2-2' }}</div>
     </div>
     <div class="stat-card">
@@ -22,37 +47,77 @@
   </div>
 
   <section class="painel">
+    <h3>Novo lançamento manual</h3>
+    <div class="form-novo">
+      <div class="form-linha">
+        <label>Tipo</label>
+        <select [(ngModel)]="novoTipo">
+          <option value="ENTRADA">Entrada</option>
+          <option value="SAIDA">Saída</option>
+        </select>
+      </div>
+      <div class="form-linha">
+        <label>Categoria</label>
+        <input type="text" [(ngModel)]="novaCategoria" placeholder="Ex.: Insumos, Utilidades..." />
+      </div>
+      <div class="form-linha">
+        <label>Valor</label>
+        <input type="number" step="0.01" [(ngModel)]="novoValor" placeholder="0,00" />
+      </div>
+      <div class="form-linha cresce">
+        <label>Descrição</label>
+        <input type="text" [(ngModel)]="novaDescricao" placeholder="Opcional" />
+      </div>
+      <button type="button" class="btn-primario" [disabled]="salvando" (click)="registrarLancamento()">
+        Registrar
+      </button>
+    </div>
+  </section>
+
+  <section class="painel">
     <h3>Lançamentos</h3>
 
     <div class="filtros">
-      <button type="button" [class.ativo]="filtroAtivo === 'Todos'" (click)="selecionarFiltro('Todos')">
+      <button type="button" [class.ativo]="filtroTipo === 'Todos'" (click)="selecionarFiltroTipo('Todos')">
         Todos
       </button>
-      <button type="button" [class.ativo]="filtroAtivo === 'Ganhos'" (click)="selecionarFiltro('Ganhos')">
-        Ganhos
+      <button type="button" [class.ativo]="filtroTipo === 'Entradas'" (click)="selecionarFiltroTipo('Entradas')">
+        Entradas
       </button>
-      <button type="button" [class.ativo]="filtroAtivo === 'Gastos'" (click)="selecionarFiltro('Gastos')">
-        Gastos
+      <button type="button" [class.ativo]="filtroTipo === 'Saidas'" (click)="selecionarFiltroTipo('Saidas')">
+        Saídas
       </button>
     </div>
 
-    <div class="lista">
-      @for (lancamento of lancamentosFiltrados; track lancamento.id) {
-        <div class="linha">
-          <div class="info">
-            <strong>{{ lancamento.descricao }}</strong>
-            <span>{{ lancamento.categoria }} · {{ lancamento.data | date: 'dd/MM/yyyy' }}</span>
-          </div>
+    @if (carregando) {
+      <p class="vazio">Carregando...</p>
+    } @else {
+      <div class="lista">
+        @for (lancamento of lancamentosFiltrados; track lancamento.id) {
+          <div class="linha">
+            <div class="info">
+              <strong>{{ lancamento.categoria }}</strong>
+              <span>
+                {{ lancamento.descricao || lancamento.tipo }}
+                @if (lancamento.dataMovimentacao) {
+                  · {{ lancamento.dataMovimentacao | date: 'dd/MM/yyyy HH:mm' }}
+                }
+              </span>
+            </div>
 
-          <div class="direita">
-            <span class="valor" [ngClass]="lancamento.tipo === 'Ganho' ? 'sucesso' : 'alerta'">
-              {{ lancamento.tipo === 'Ganho' ? '+' : '-' }} R$ {{ lancamento.valor | number: '1.2-2' }}
-            </span>
+            <div class="direita">
+              <span class="valor" [ngClass]="ehSaida(lancamento) ? 'alerta' : 'sucesso'">
+                {{ ehSaida(lancamento) ? '-' : '+' }} R$ {{ lancamento.valor | number: '1.2-2' }}
+              </span>
+              <button type="button" class="btn-excluir" title="Excluir" (click)="excluir(lancamento)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
           </div>
-        </div>
-      } @empty {
-        <p class="vazio">Nenhum lançamento encontrado.</p>
-      }
-    </div>
+        } @empty {
+          <p class="vazio">Nenhum lançamento encontrado nesse período.</p>
+        }
+      </div>
+    }
   </section>
 </div>

@@ -29,8 +29,13 @@ export interface Venda {
   status: string;
   tipo: string;
   origem: string | null;
+  valor_total: number | null;
+  desconto: number | null;
+  dataCriacao: string | null;
   mesa: { id: number; numero: number } | null;
   nomeCliente: string | null;
+  cliente: { id: number; nome: string; saldoCashback: number | null } | null;
+  cupom: { id: number; codigo: string } | null;
   usuario: { id: number; nome: string } | null;
   itens: ItemVendaResumo[] | null;
 }
@@ -40,6 +45,7 @@ export interface VendaPayload {
   tipo: string;
   mesa: { id: number } | null;
   nomeCliente: string | null;
+  cliente: { id: number } | null;
   usuario: { id: number };
 }
 
@@ -47,6 +53,12 @@ export interface ProdutoRanking {
   nomeProduto: string;
   quantidadeVendida: number;
   faturamentoTotal: number;
+}
+
+export interface RelatorioFaturamento {
+  totalFaturado: number;
+  ticketMedio: number;
+  quantidadeVendas: number;
 }
 
 const API_URL = `${environment.apiUrl}/venda`;
@@ -69,5 +81,17 @@ export class VendaService {
 
   ranking(): Observable<ProdutoRanking[]> {
     return this.http.get<ProdutoRanking[]>(`${API_URL}/ranking`);
+  }
+
+  relatorio(inicio: string, fim: string): Observable<RelatorioFaturamento> {
+    return this.http.get<RelatorioFaturamento>(`${API_URL}/relatorio`, { params: { inicio, fim } });
+  }
+
+  aplicarCupom(vendaId: number, codigo: string): Observable<Venda> {
+    return this.http.post<Venda>(`${API_URL}/${vendaId}/cupom`, { codigo });
+  }
+
+  resgatarCashback(vendaId: number, valor: number): Observable<Venda> {
+    return this.http.post<Venda>(`${API_URL}/${vendaId}/resgatar-cashback`, { valor });
   }
 }

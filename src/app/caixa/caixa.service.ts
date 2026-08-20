@@ -46,4 +46,8 @@ export class CaixaService {
   ): Observable<unknown> {
     return this.http.post(`${API_URL}/${id}/movimentacao`, { tipo, valor, descricao });
   }
+
+  historico(inicio: string, fim: string): Observable<Caixa[]> {
+    return this.http.get<Caixa[]>(`${API_URL}/historico`, { params: { inicio, fim } });
+  }
 }

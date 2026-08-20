@@ -29,6 +29,28 @@
 
 .acoes { display: flex; gap: 10px; flex-wrap: wrap; }
 
+.painel-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+.painel-header h3 { margin: 0; }
+
+.lista-historico { display: flex; flex-direction: column; }
+.linha-historico {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: 1px solid #f3f4f6;
+  flex-wrap: wrap;
+}
+.linha-historico:last-child { border-bottom: none; }
+.linha-historico .info { display: flex; flex-direction: column; gap: 2px; }
+.linha-historico .info strong { font-size: 14px; color: #111827; }
+.linha-historico .info span { font-size: 12.5px; color: #9ca3af; }
+.linha-historico .direita { display: flex; gap: 14px; flex-wrap: wrap; }
+.linha-historico .valor { font-size: 12.5px; font-weight: 600; color: #6b7280; white-space: nowrap; }
+.linha-historico .valor.sucesso { color: #16a34a; }
+.linha-historico .valor.alerta { color: #dc2626; }
+
 .btn-primario {
   border: none;
   background: #16a34a;

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
+import { PeriodoUtil } from '../utils/periodoUtil';
 import { Caixa, CaixaService } from './caixa.service';
 
 @Component({
@@ -19,6 +20,10 @@ export class CaixaComponent implements OnInit {
   carregando = true;
   erro: string | null = null;
   processando = false;
+
+  mostrarHistorico = false;
+  carregandoHistorico = false;
+  historico: Caixa[] = [];
 
   valorInicial: number | null = null;
   observacoesAbertura = '';
@@ -80,15 +85,43 @@ export class CaixaComponent implements OnInit {
 
     this.processando = true;
     this.caixaService.fechar(this.caixa.id, this.valorApuradoInformado, this.observacoesFechamento).subscribe({
-      next: (caixa) => {
-        this.caixa = caixa;
+      next: () => {
+        // Recarrega o status (em vez de usar a sessão fechada retornada
+        // diretamente) para a tela voltar ao estado "nenhum caixa aberto".
+        this.carregar();
         this.processando = false;
         this.valorApuradoInformado = null;
         this.observacoesFechamento = '';
+        this.historico = [];
+        if (this.mostrarHistorico) {
+          this.carregarHistorico();
+        }
       },
       error: () => {
         this.erro = 'Não foi possível fechar o caixa.';
         this.processando = false;
+      },
+    });
+  }
+
+  alternarHistorico() {
+    this.mostrarHistorico = !this.mostrarHistorico;
+    if (this.mostrarHistorico && this.historico.length === 0) {
+      this.carregarHistorico();
+    }
+  }
+
+  carregarHistorico() {
+    const { inicio, fim } = PeriodoUtil.resolver('mes');
+    this.carregandoHistorico = true;
+    this.caixaService.historico(inicio, fim).subscribe({
+      next: (historico) => {
+        this.historico = historico;
+        this.carregandoHistorico = false;
+      },
+      error: () => {
+        this.erro = 'Não foi possível carregar o histórico de fechamentos.';
+        this.carregandoHistorico = false;
       },
     });
   }

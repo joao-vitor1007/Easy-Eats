@@ -166,6 +166,82 @@
   margin: 0;
 }
 
+.vazio.erro {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.form-periodo {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.form-novo {
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.form-linha {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-linha.cresce {
+  flex: 1;
+  min-width: 160px;
+}
+
+.form-linha label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-linha input,
+.form-linha select {
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13.5px;
+  background: white;
+}
+
+.btn-primario {
+  border: none;
+  background: #ea580c;
+  color: #fff;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primario:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-excluir {
+  border: none;
+  background: transparent;
+  color: #9ca3af;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+}
+
+.btn-excluir:hover {
+  color: #dc2626;
+}
+
 @media (max-width: 680px) {
   .pagina {
     padding: 20px 16px 60px;

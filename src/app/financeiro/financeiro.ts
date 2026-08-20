@@ -1,104 +1,55 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
-interface Produto {
-  id: number;
-  nome: string;
-  categoria: string;
-  unidade: string;
-  preco: number;
-  estoque: number;
-}
-
-const ICONE_POR_CATEGORIA: Record<string, string> = {
-  Lanches: 'bi-egg-fried',
-  Bebidas: 'bi-cup-straw',
-};
+import { RouterLink } from '@angular/router';
+import { RelatorioFaturamento, VendaService } from '../novo-pedido/venda.service';
+import { FiltroPeriodo, PeriodoUtil } from '../utils/periodoUtil';
 
 @Component({
   selector: 'app-financeiro',
   templateUrl: './financeiro.html',
-  imports: [CommonModule, FormsModule],
-  styleUrls: ['./financeiro.scss']
+  imports: [CommonModule, FormsModule, RouterLink],
+  styleUrls: ['./financeiro.scss'],
 })
 export class Financeiro implements OnInit {
-  abaSelecionada: 'resumo' | 'vendas' | 'despesas' | 'produtos' = 'resumo';
-  filtroSelecionado: 'hoje' | 'semana' | 'periodo' = 'hoje';
+  private vendaService = inject(VendaService);
 
-  busca: string = '';
-  estoqueMinimo = 5;
+  filtroSelecionado: FiltroPeriodo = 'hoje';
+  dataInicioCustom = PeriodoUtil.paraIso(new Date());
+  dataFimCustom = PeriodoUtil.paraIso(new Date());
 
-  vendas = 178;
-  despesas = 405;
-
-  get lucro(): number {
-    return this.vendas - this.despesas;
-  }
-
-  get resumo() {
-    return {
-      pedidos: 3,
-      ticketMedio: 59.33,
-      despesasRegistradas: 3,
-      resultado: this.lucro,
-    };
-  }
-
-  produtos: Produto[] = [
-    { id: 1, nome: 'Hot Dog', categoria: 'Lanches', unidade: 'unidade', preco: 15, estoque: 10 },
-    { id: 2, nome: 'Guaraná', categoria: 'Bebidas', unidade: 'unidade', preco: 7, estoque: 3 },
-    { id: 3, nome: 'Hambúrguer Clássico', categoria: 'Lanches', unidade: 'unidade', preco: 22, estoque: 8 },
-    { id: 4, nome: 'Coca-Cola', categoria: 'Bebidas', unidade: 'unidade', preco: 7, estoque: 6 },
-    { id: 5, nome: 'Batata Frita', categoria: 'Lanches', unidade: 'porção', preco: 12, estoque: 2 },
-  ];
-
-  produtosFiltrados: Produto[] = [];
+  carregando = true;
+  erro: string | null = null;
+  relatorio: RelatorioFaturamento | null = null;
 
   ngOnInit() {
-    this.produtosFiltrados = [...this.produtos];
+    this.carregar();
   }
 
-  selecionarAba(aba: any) {
-    this.abaSelecionada = aba;
-  }
-
-  selecionarFiltro(filtro: any) {
+  selecionarFiltro(filtro: FiltroPeriodo) {
     this.filtroSelecionado = filtro;
-  }
-
-  filtrarProdutos() {
-    const termo = this.busca.toLowerCase().trim();
-    
-    if (!termo) {
-      this.produtosFiltrados = [...this.produtos];
-    } else {
-      this.produtosFiltrados = this.produtos.filter(p =>
-        p.nome.toLowerCase().includes(termo)
-      );
+    if (filtro !== 'periodo') {
+      this.carregar();
     }
   }
 
-  isEstoqueBaixo(p: Produto) {
-    return p.estoque < this.estoqueMinimo;
-  }
+  carregar() {
+    const { inicio, fim } = PeriodoUtil.resolver(this.filtroSelecionado, {
+      inicio: this.dataInicioCustom,
+      fim: this.dataFimCustom,
+    });
+    this.carregando = true;
+    this.erro = null;
 
-  iconeCategoria(categoria: string): string {
-    return ICONE_POR_CATEGORIA[categoria] ?? 'bi-box-seam';
-  }
-
-  novoProduto() {
-    console.log('Novo produto');
-  }
-
-  editar(p: Produto) {
-    console.log('Editar', p);
-  }
-
-  excluir(p: Produto) {
-    if (confirm(`Excluir ${p.nome}?`)) {
-      this.produtos = this.produtos.filter(x => x.id !== p.id);
-      this.filtrarProdutos();
-    }
+    this.vendaService.relatorio(inicio, fim).subscribe({
+      next: (relatorio) => {
+        this.relatorio = relatorio;
+        this.carregando = false;
+      },
+      error: () => {
+        this.erro = 'Não foi possível carregar o faturamento do período.';
+        this.carregando = false;
+      },
+    });
   }
 }

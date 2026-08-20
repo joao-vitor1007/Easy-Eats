@@ -89,4 +89,42 @@
       </section>
     }
   }
+
+  <section class="painel">
+    <div class="painel-header">
+      <h3>Histórico de fechamentos (últimos 30 dias)</h3>
+      <button type="button" class="btn-secundario" (click)="alternarHistorico()">
+        {{ mostrarHistorico ? 'Ocultar' : 'Ver histórico' }}
+      </button>
+    </div>
+
+    @if (mostrarHistorico) {
+      @if (carregandoHistorico) {
+        <p class="vazio">Carregando...</p>
+      } @else {
+        <div class="lista-historico">
+          @for (sessao of historico; track sessao.id) {
+            <div class="linha-historico">
+              <div class="info">
+                <strong>{{ sessao.dtFechamento | date: 'dd/MM/yyyy HH:mm' }}</strong>
+                <span>Aberto por {{ sessao.usuarioAbertura?.nome ?? '-' }}, fechado por {{ sessao.usuarioFechamento?.nome ?? '-' }}</span>
+              </div>
+              <div class="direita">
+                <span class="valor">Sistema: {{ sessao.valorApuradoSistema | currency: 'BRL' }}</span>
+                <span class="valor">Informado: {{ sessao.valorApuradoInformado | currency: 'BRL' }}</span>
+                <span
+                  class="valor"
+                  [ngClass]="(sessao.diferenca ?? 0) === 0 ? 'sucesso' : 'alerta'"
+                >
+                  Diferença: {{ sessao.diferenca | currency: 'BRL' }}
+                </span>
+              </div>
+            </div>
+          } @empty {
+            <p class="vazio">Nenhum fechamento nos últimos 30 dias.</p>
+          }
+        </div>
+      }
+    }
+  </section>
 </div>

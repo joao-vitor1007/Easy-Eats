@@ -1,66 +1,144 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MensagemErroApiUtil } from '../utils/mensagemErroApiUtil';
+import { FiltroPeriodo, PeriodoUtil } from '../utils/periodoUtil';
+import {
+  MovimentacaoFinanceira,
+  MovimentacaoFinanceiraService,
+} from './movimentacao-financeira.service';
 
-type TipoLancamento = 'Ganho' | 'Gasto';
-type FiltroLancamento = 'Todos' | 'Ganhos' | 'Gastos';
+type FiltroTipo = 'Todos' | 'Entradas' | 'Saidas';
 
-interface Lancamento {
-  id: number;
-  descricao: string;
-  categoria: string;
-  data: string;
-  valor: number;
-  tipo: TipoLancamento;
-}
+// Lançamentos de sangria (retirada do caixa) e do tipo SAIDA contam como
+// saída; qualquer outro tipo (ENTRADA, SUPRIMENTO, ou um tipo customizado
+// criado aqui) conta como entrada.
+const TIPOS_SAIDA = ['SANGRIA', 'SAIDA'];
 
 @Component({
   selector: 'app-gestao-financeira',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './gestao-financeira.html',
   styleUrl: './gestao-financeira.scss',
 })
-export class GestaoFinanceira {
-  filtroAtivo: FiltroLancamento = 'Todos';
+export class GestaoFinanceira implements OnInit {
+  private service = inject(MovimentacaoFinanceiraService);
 
-  lancamentos: Lancamento[] = [
-    { id: 1, descricao: 'Venda no balcão', categoria: 'Vendas', data: '2026-07-28', valor: 620, tipo: 'Ganho' },
-    { id: 2, descricao: 'Compra de carne bovina', categoria: 'Insumos', data: '2026-07-27', valor: 1250, tipo: 'Gasto' },
-    { id: 3, descricao: 'Venda delivery', categoria: 'Vendas', data: '2026-07-27', valor: 340, tipo: 'Ganho' },
-    { id: 4, descricao: 'Conta de energia', categoria: 'Utilidades', data: '2026-07-26', valor: 480, tipo: 'Gasto' },
-    { id: 5, descricao: 'Venda no balcão', categoria: 'Vendas', data: '2026-07-25', valor: 510, tipo: 'Ganho' },
-    { id: 6, descricao: 'Salário funcionários', categoria: 'Folha de Pagamento', data: '2026-07-24', valor: 3200, tipo: 'Gasto' },
-    { id: 7, descricao: 'Compra de embalagens', categoria: 'Insumos', data: '2026-07-23', valor: 210, tipo: 'Gasto' },
-    { id: 8, descricao: 'Venda evento corporativo', categoria: 'Vendas', data: '2026-07-22', valor: 1800, tipo: 'Ganho' },
-  ];
+  filtroTipo: FiltroTipo = 'Todos';
+  filtroPeriodo: FiltroPeriodo = 'mes';
+  dataInicioCustom = PeriodoUtil.paraIso(new Date());
+  dataFimCustom = PeriodoUtil.paraIso(new Date());
 
-  get lancamentosFiltrados(): Lancamento[] {
-    if (this.filtroAtivo === 'Ganhos') {
-      return this.lancamentos.filter((l) => l.tipo === 'Ganho');
+  carregando = true;
+  erro: string | null = null;
+  salvando = false;
+  lancamentos: MovimentacaoFinanceira[] = [];
+
+  novoTipo: 'ENTRADA' | 'SAIDA' = 'ENTRADA';
+  novaCategoria = '';
+  novoValor: number | null = null;
+  novaDescricao = '';
+
+  ngOnInit() {
+    this.carregar();
+  }
+
+  ehSaida(lancamento: MovimentacaoFinanceira): boolean {
+    return TIPOS_SAIDA.includes((lancamento.tipo ?? '').toUpperCase());
+  }
+
+  get lancamentosFiltrados(): MovimentacaoFinanceira[] {
+    if (this.filtroTipo === 'Entradas') {
+      return this.lancamentos.filter((l) => !this.ehSaida(l));
     }
-    if (this.filtroAtivo === 'Gastos') {
-      return this.lancamentos.filter((l) => l.tipo === 'Gasto');
+    if (this.filtroTipo === 'Saidas') {
+      return this.lancamentos.filter((l) => this.ehSaida(l));
     }
     return this.lancamentos;
   }
 
   get totalGanhos(): number {
-    return this.lancamentos
-      .filter((l) => l.tipo === 'Ganho')
-      .reduce((soma, l) => soma + l.valor, 0);
+    return this.lancamentos.filter((l) => !this.ehSaida(l)).reduce((soma, l) => soma + l.valor, 0);
   }
 
   get totalGastos(): number {
-    return this.lancamentos
-      .filter((l) => l.tipo === 'Gasto')
-      .reduce((soma, l) => soma + l.valor, 0);
+    return this.lancamentos.filter((l) => this.ehSaida(l)).reduce((soma, l) => soma + l.valor, 0);
   }
 
   get saldo(): number {
     return this.totalGanhos - this.totalGastos;
   }
 
-  selecionarFiltro(filtro: FiltroLancamento) {
-    this.filtroAtivo = filtro;
+  selecionarFiltroTipo(filtro: FiltroTipo) {
+    this.filtroTipo = filtro;
+  }
+
+  selecionarFiltroPeriodo(filtro: FiltroPeriodo) {
+    this.filtroPeriodo = filtro;
+    if (filtro !== 'periodo') {
+      this.carregar();
+    }
+  }
+
+  carregar() {
+    const { inicio, fim } = PeriodoUtil.resolver(this.filtroPeriodo, {
+      inicio: this.dataInicioCustom,
+      fim: this.dataFimCustom,
+    });
+    this.carregando = true;
+    this.erro = null;
+
+    this.service.listarPorPeriodo(inicio, fim).subscribe({
+      next: (lancamentos) => {
+        this.lancamentos = lancamentos;
+        this.carregando = false;
+      },
+      error: () => {
+        this.erro = 'Não foi possível carregar os lançamentos.';
+        this.carregando = false;
+      },
+    });
+  }
+
+  registrarLancamento() {
+    if (!this.novaCategoria.trim() || !this.novoValor || this.novoValor <= 0) {
+      this.erro = 'Informe a categoria e um valor maior que zero.';
+      return;
+    }
+
+    this.salvando = true;
+    this.erro = null;
+
+    this.service
+      .criar({
+        tipo: this.novoTipo,
+        categoria: this.novaCategoria.trim(),
+        valor: this.novoValor,
+        descricao: this.novaDescricao.trim() || null,
+      })
+      .subscribe({
+        next: () => {
+          this.salvando = false;
+          this.novaCategoria = '';
+          this.novoValor = null;
+          this.novaDescricao = '';
+          this.carregar();
+        },
+        error: (erro) => {
+          this.salvando = false;
+          this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível registrar o lançamento.');
+        },
+      });
+  }
+
+  excluir(lancamento: MovimentacaoFinanceira) {
+    if (!confirm(`Excluir o lançamento "${lancamento.categoria}"?`)) {
+      return;
+    }
+    this.service.excluir(lancamento.id).subscribe({
+      next: () => this.carregar(),
+      error: () => (this.erro = 'Não foi possível excluir o lançamento.'),
+    });
   }
 }
