@@ -1,6 +1,53 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
 
+/* ==========================================================================
+   TOKENS DE DESIGN
+   Início de centralização das cores/raios/sombras repetidos em cada .scss
+   de tela (ex.: #ea580c, #f97316, raio 7-8px, sombra de foco). Hoje só os
+   componentes novos/recentes (campo-senha, toggle-switch, app-input,
+   app-carregando, login, usuarios, cadastro-produto, modal-produto)
+   consomem essas variáveis — o restante do app ainda usa valores fixos por
+   tela. Migrar o restante é trabalho futuro, não feito aqui para não mexer
+   em telas fora do escopo desta tarefa.
+   ========================================================================== */
+:root {
+  --color-primary: #ea580c;
+  --color-primary-hover: #c2410c;
+  --color-primary-focus-ring: rgba(249, 115, 22, 0.12);
+  --color-focus-border: #f97316;
+
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-text-subtle: #9ca3af;
+
+  --color-border: #e5e7eb;
+  --color-bg-input: #fafafa;
+  --color-bg-surface: #ffffff;
+
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #fecaca;
+  --color-danger-text: #dc2626;
+
+  --color-success-bg: #ecfdf5;
+  --color-success-border: #bbf7d0;
+  --color-success-text: #16a34a;
+
+  --radius-sm: 6px;
+  --radius-md: 7px;
+  --radius-lg: 8px;
+}
+
+:root[data-theme='escuro'] {
+  --color-text: #f3f4f6;
+  --color-text-muted: #9ca3af;
+  --color-text-subtle: #6b7280;
+
+  --color-border: #2b2f38;
+  --color-bg-input: #14161a;
+  --color-bg-surface: #1c1f26;
+}
+
 :host {
   display: flex;
   min-height: calc(100vh - 70px);
@@ -206,7 +253,9 @@ html[data-theme='escuro'] .campo select,
 html[data-theme='escuro'] .input-icone input,
 html[data-theme='escuro'] .input-busca,
 html[data-theme='escuro'] .barra-filtros select,
-html[data-theme='escuro'] input.input-edicao-discreto {
+html[data-theme='escuro'] input.input-edicao-discreto,
+html[data-theme='escuro'] .campo-senha input,
+html[data-theme='escuro'] .campo-texto input {
   background: #14161a !important;
   border-color: #2b2f38 !important;
   color: #e5e7eb !important;

@@ -4,6 +4,10 @@
     <p>Acompanhe as comandas abertas e o valor consumido por mesa</p>
   </header>
 
+  @if (erro) {
+    <p class="vazio">{{ erro }}</p>
+  }
+
   <div class="grid-stats">
     <div class="stat-card">
       <div class="stat-label">Comandas Abertas</div>
@@ -18,27 +22,38 @@
   <section class="painel">
     <h3>Comandas</h3>
 
-    <div class="lista">
-      @for (comanda of comandas; track comanda.id) {
-        <div class="linha">
-          <div class="info">
-            <strong>Mesa {{ comanda.mesa }} - {{ comanda.cliente }}</strong>
-            <span>{{ comanda.quantidadeItens }} itens · {{ comanda.valorAcumulado | currency: 'BRL' }}</span>
-          </div>
+    @if (carregando) {
+      <p class="vazio">Carregando comandas...</p>
+    } @else {
+      <div class="lista">
+        @for (comanda of comandas; track comanda.id) {
+          <div class="linha">
+            <div class="info">
+              <strong>Mesa {{ comanda.mesa.numero }} · Comanda #{{ comanda.numero }}</strong>
+              <span>{{ quantidadeItens(comanda) }} itens · {{ totalComanda(comanda) | currency: 'BRL' }}</span>
+            </div>
 
-          <div class="direita">
-            <span class="badge" [ngClass]="badgeClasse(comanda.status)">{{ comanda.status }}</span>
-            @if (comanda.status === 'Aberta') {
-              <button type="button" class="btn-fechar" (click)="fecharComanda(comanda)">
-                <i class="bi bi-check2-circle"></i>
-                Fechar Comanda
-              </button>
-            }
+            <div class="direita">
+              <span class="badge" [ngClass]="badgeClasse(comanda.status)">{{
+                comanda.status === 'ABERTA' ? 'Aberta' : 'Fechada'
+              }}</span>
+              @if (comanda.status === 'ABERTA') {
+                <button
+                  type="button"
+                  class="btn-fechar"
+                  [disabled]="fechando === comanda.id"
+                  (click)="fecharComanda(comanda)"
+                >
+                  <i class="bi bi-check2-circle"></i>
+                  Fechar Comanda
+                </button>
+              }
+            </div>
           </div>
-        </div>
-      } @empty {
-        <p class="vazio">Nenhuma comanda registrada.</p>
-      }
-    </div>
+        } @empty {
+          <p class="vazio">Nenhuma comanda registrada.</p>
+        }
+      </div>
+    }
   </section>
 </div>

@@ -2,7 +2,15 @@ import { inject } from '@angular/core';
 import { CanActivateChildFn, Router } from '@angular/router';
 import { AuthService } from './auth.service';
 
-const ROTAS_PERMITIDAS_GARCOM = ['home', 'novo-pedido', 'tela-cozinha', 'perfil-garcom'];
+const ROTAS_PERMITIDAS_GARCOM = [
+  'home',
+  'novo-pedido',
+  'tela-cozinha',
+  'perfil-garcom',
+  'mesas',
+  'comandas',
+  'caixa',
+];
 
 /**
  * O Garçom tem acesso apenas a um pequeno conjunto de telas (pedido e

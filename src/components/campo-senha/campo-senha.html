@@ -1,0 +1,24 @@
+<div class="campo-senha">
+  <i class="bi bi-lock" aria-hidden="true"></i>
+
+  <input
+    [id]="inputId"
+    [type]="mostrarSenha ? 'text' : 'password'"
+    [placeholder]="placeholder"
+    [value]="valor"
+    [disabled]="desabilitado"
+    autocomplete="current-password"
+    (input)="aoDigitar($any($event.target).value)"
+    (blur)="aoTocar()"
+  />
+
+  <button
+    type="button"
+    class="btn-alternar-senha"
+    (click)="alternarVisibilidade()"
+    [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'"
+    [attr.aria-pressed]="mostrarSenha"
+  >
+    <i class="bi" [ngClass]="mostrarSenha ? 'bi-eye-slash' : 'bi-eye'" aria-hidden="true"></i>
+  </button>
+</div>

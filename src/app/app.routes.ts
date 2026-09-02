@@ -5,6 +5,7 @@ import { authGuard } from './auth/auth.guard';
 import { superadminGuard } from './auth/role.guard';
 import { funcionalidadeGuard } from './auth/funcionalidade.guard';
 import { garcomAreaGuard } from './auth/garcom-area.guard';
+import { cozinheiroAreaGuard } from './auth/cozinheiro-area.guard';
 import { Home } from './home/home';
 import { DashboardComponent } from './dashboard/dashboard';
 import { ComponentFila } from './Fila/component.fila';
@@ -19,6 +20,9 @@ import { NovoPedido } from './novo-pedido/novo-pedido';
 import { PerfilAdmin } from './perfil-admin/perfilAdmin';
 import { PerfilGarcom } from './perfil-garcom/perfilGarcom';
 import { CadastroProdutoComponent } from './cadastro-produto/cadastroProduto';
+import { CardapioAdmin } from './cardapio-admin/cardapio-admin';
+import { CaixaComponent } from './caixa/caixa';
+import { CuponsCashback } from './cupons-cashback/cupons-cashback';
 import { Mesas } from './mesas/mesas';
 import { Comandas } from './comandas/comandas';
 import { Fornecedores } from './fornecedores/fornecedores';
@@ -55,13 +59,14 @@ export const routes: Routes = [
     path: '',
     component: AppLayout,
     canActivate: [authGuard],
-    canActivateChild: [garcomAreaGuard],
+    canActivateChild: [garcomAreaGuard, cozinheiroAreaGuard],
     children: [
       { path: 'home', component: Home },
       { path: 'dashboard', component: DashboardComponent },
 
       { path: 'mesas', component: Mesas, canActivate: [funcionalidadeGuard(['OPERACAO'])] },
       { path: 'comandas', component: Comandas, canActivate: [funcionalidadeGuard(['OPERACAO'])] },
+      { path: 'caixa', component: CaixaComponent, canActivate: [funcionalidadeGuard(['CAIXA'])] },
 
       { path: 'novo-pedido', component: NovoPedido, canActivate: [funcionalidadeGuard(['PEDIDO'])] },
       { path: 'historico-vendas', component: HistoricoVendasComponent, canActivate: [funcionalidadeGuard(['PEDIDO'])] },
@@ -86,9 +91,11 @@ export const routes: Routes = [
 
       { path: 'cadastro-produto', component: CadastroProdutoComponent, canActivate: [funcionalidadeGuard(['PRODUTOS'])] },
       { path: 'ficha-tecnica', component: FichaTecnica, canActivate: [funcionalidadeGuard(['PRODUTOS'])] },
+      { path: 'cardapio-admin', component: CardapioAdmin, canActivate: [funcionalidadeGuard(['PRODUTOS'])] },
 
       { path: 'clientes', component: Clientes, canActivate: [funcionalidadeGuard(['CLIENTES'])] },
       { path: 'fidelidade', component: Fidelidade, canActivate: [funcionalidadeGuard(['CLIENTES'])] },
+      { path: 'cupons-cashback', component: CuponsCashback, canActivate: [funcionalidadeGuard(['CUPONS'])] },
 
       { path: 'usuarios', component: Usuarios, canActivate: [funcionalidadeGuard(['USUARIOS'])] },
       { path: 'grupos-acesso', component: GruposAcesso, canActivate: [funcionalidadeGuard(['USUARIOS'])] },

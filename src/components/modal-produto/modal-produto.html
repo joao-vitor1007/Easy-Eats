@@ -1,7 +1,7 @@
 @if (produto) {
   <div class="modal-overlay" (click)="fecharModal()">
-    <div class="modal-content" (click)="$event.stopPropagation()">
-      
+    <div class="modal-content" [class.modal-content--largo]="ehPreparado" (click)="$event.stopPropagation()">
+
       <button class="btn-fechar" (click)="fecharModal()">
         <i class="bi bi-x-lg"></i>
       </button>
@@ -9,13 +9,70 @@
       <div class="modal-header">
         <div class="icone-grande"><i class="bi" [ngClass]="iconeProduto"></i></div>
         <h3>{{ produto.nome }}</h3>
-        <span class="preco-destaque">R$ {{ produto.preco.toFixed(2) }}</span>
+        <span class="preco-destaque">R$ {{ precoTotal.toFixed(2) }}</span>
       </div>
 
       <div class="modal-body">
         <p class="descricao">
           {{ produto.descricao }}
         </p>
+
+        @if (ehPreparado) {
+          @if (carregandoDetalhes) {
+            <p class="carregando-detalhes">Carregando composição...</p>
+          } @else {
+            @if (composicao.length > 0) {
+              <div class="secao">
+                <h4>Composição</h4>
+                <p class="ajuda">Desative o que não quiser no seu pedido.</p>
+
+                <ul class="lista-composicao">
+                  @for (item of composicao; track item.id) {
+                    <li class="linha-composicao" [class.removido]="!estaMantido(item)">
+                      <span>{{ item.nome }}</span>
+                      <app-toggle-switch
+                        [checked]="estaMantido(item)"
+                        (checkedChange)="alternarComposicao(item, $event)"
+                      ></app-toggle-switch>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @if (adicionaisDisponiveis.length > 0) {
+              <div class="secao">
+                <h4>Adicionais</h4>
+
+                <ul class="lista-adicionais">
+                  @for (adicional of adicionaisDisponiveis; track adicional.id) {
+                    <li class="linha-adicional">
+                      <label>
+                        <input
+                          type="checkbox"
+                          [checked]="estaSelecionado(adicional)"
+                          (change)="alternarAdicional(adicional, !estaSelecionado(adicional))"
+                        />
+                        <span>{{ adicional.nome }}</span>
+                      </label>
+                      <span class="preco-adicional">+ R$ {{ adicional.preco.toFixed(2) }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            <div class="secao">
+              <h4>Observação</h4>
+              <textarea
+                class="campo-observacao"
+                placeholder="Ex: sem cebola, bem passado..."
+                rows="2"
+                [(ngModel)]="observacao"
+              ></textarea>
+            </div>
+          }
+        }
       </div>
 
       <div class="modal-footer">

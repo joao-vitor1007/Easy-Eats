@@ -163,6 +163,19 @@
   color: #111827;
 }
 
+.status {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+}
+
+.status.aguardando { background: #fffbe6; color: #b45309; }
+.status.preparando { background: #fff7ed; color: #ea580c; }
+.status.pronto { background: #ecfdf5; color: #16a34a; }
+.status.entregue { background: #f3f4f6; color: #6b7280; }
+
 .card-pedido .itens p {
   margin: 4px 0;
   color: #6b7280;

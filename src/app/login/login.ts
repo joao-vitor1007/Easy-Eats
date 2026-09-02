@@ -2,23 +2,23 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CampoSenhaComponent } from '../../components/campo-senha/campo-senha';
+import { CampoTextoComponent } from '../../components/campo-texto/campo-texto';
 import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.html',
   styleUrls: ['./login.scss'],
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, CampoSenhaComponent, CampoTextoComponent],
   standalone: true,
 })
 export class Login {
   modoRecuperarSenha = false;
-  showPassword = false;
   currentYear: number = new Date().getFullYear();
 
   enviando = false;
   erro: string | null = null;
-  recuperacaoEnviada = false;
 
   private fb = inject(FormBuilder);
   private router = inject(Router);
@@ -29,22 +29,13 @@ export class Login {
     password: ['', Validators.required],
   });
 
-  recuperarForm = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-  });
-
   mensagensValidacoes = {
     email: { required: 'Email é obrigatório.', email: 'Email inválido.' },
     password: { required: 'Senha obrigatória.' },
   };
 
-  togglePassword() {
-    this.showPassword = !this.showPassword;
-  }
-
   abrirRecuperarSenha() {
     this.modoRecuperarSenha = true;
-    this.recuperacaoEnviada = false;
     this.erro = null;
   }
 
@@ -70,6 +61,8 @@ export class Login {
           rota = '/superadmin-dashboard';
         } else if (this.authService.isGarcom()) {
           rota = '/novo-pedido';
+        } else if (this.authService.isCozinheiro()) {
+          rota = '/tela-cozinha';
         }
         this.router.navigate([rota]);
       },
@@ -78,17 +71,5 @@ export class Login {
         this.erro = 'E-mail ou senha inválidos.';
       },
     });
-  }
-
-  enviarRecuperacao() {
-    if (this.recuperarForm.invalid) {
-      this.recuperarForm.markAllAsTouched();
-      return;
-    }
-
-    // Recuperação de senha por e-mail ainda não está implementada no backend
-    // (não há envio de e-mail configurado). Em vez de fingir que um link foi
-    // enviado, orientamos o usuário a procurar um administrador.
-    this.recuperacaoEnviada = true;
   }
 }

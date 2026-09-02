@@ -1,12 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-type StatusMesa = 'Livre' | 'Ocupada' | 'Reservada';
-
-interface Mesa {
-  numero: number;
-  status: StatusMesa;
-}
+import { Router } from '@angular/router';
+import { ComandaService } from '../comandas/comanda.service';
+import { Mesa, MesaService } from './mesa.service';
 
 @Component({
   selector: 'app-mesas',
@@ -15,44 +11,94 @@ interface Mesa {
   templateUrl: './mesas.html',
   styleUrl: './mesas.scss',
 })
-export class Mesas {
-  mesas: Mesa[] = Array.from({ length: 12 }, (_, i) => ({
-    numero: i + 1,
-    status: this.statusInicial(i + 1),
-  }));
+export class Mesas implements OnInit {
+  private mesaService = inject(MesaService);
+  private comandaService = inject(ComandaService);
+  private router = inject(Router);
 
-  private statusInicial(numero: number): StatusMesa {
-    if ([2, 5, 9].includes(numero)) return 'Ocupada';
-    if ([4, 8].includes(numero)) return 'Reservada';
-    return 'Livre';
+  mesas: Mesa[] = [];
+  carregando = true;
+  erro: string | null = null;
+  abrindoMesaId: number | null = null;
+
+  ngOnInit() {
+    this.carregar();
+  }
+
+  carregar() {
+    this.carregando = true;
+    this.mesaService.listar().subscribe({
+      next: (mesas) => {
+        this.mesas = mesas;
+        this.carregando = false;
+      },
+      error: () => {
+        this.erro = 'Não foi possível carregar as mesas.';
+        this.carregando = false;
+      },
+    });
   }
 
   get totalLivres(): number {
-    return this.mesas.filter((m) => m.status === 'Livre').length;
+    return this.mesas.filter((m) => m.status === 'LIVRE').length;
   }
 
   get totalOcupadas(): number {
-    return this.mesas.filter((m) => m.status === 'Ocupada').length;
+    return this.mesas.filter((m) => m.status === 'OCUPADA').length;
   }
 
   get totalReservadas(): number {
-    return this.mesas.filter((m) => m.status === 'Reservada').length;
+    return this.mesas.filter((m) => m.status === 'RESERVADA').length;
   }
 
-  badgeClasse(status: StatusMesa): string {
+  badgeClasse(status: string): string {
     switch (status) {
-      case 'Livre':
+      case 'LIVRE':
         return 'sucesso';
-      case 'Ocupada':
+      case 'OCUPADA':
         return 'alerta';
-      case 'Reservada':
+      case 'RESERVADA':
+        return 'neutro';
+      default:
         return 'neutro';
     }
   }
 
-  cicloStatus(mesa: Mesa) {
-    const ordem: StatusMesa[] = ['Livre', 'Ocupada', 'Reservada'];
-    const indiceAtual = ordem.indexOf(mesa.status);
-    mesa.status = ordem[(indiceAtual + 1) % ordem.length];
+  rotulo(status: string): string {
+    switch (status) {
+      case 'LIVRE':
+        return 'Livre';
+      case 'OCUPADA':
+        return 'Ocupada';
+      case 'RESERVADA':
+        return 'Reservada';
+      default:
+        return status;
+    }
+  }
+
+  /**
+   * Mesa livre: abre uma comanda nova e já leva para o pedido. Mesa ocupada:
+   * só leva para o pedido (a comanda aberta é resolvida lá, por mesa).
+   */
+  selecionarMesa(mesa: Mesa) {
+    if (this.abrindoMesaId) return;
+
+    if (mesa.status !== 'LIVRE') {
+      this.router.navigate(['/novo-pedido'], { queryParams: { mesa: mesa.id } });
+      return;
+    }
+
+    this.abrindoMesaId = mesa.id;
+    this.comandaService.abrir({ mesa: { id: mesa.id } }).subscribe({
+      next: () => {
+        this.abrindoMesaId = null;
+        this.router.navigate(['/novo-pedido'], { queryParams: { mesa: mesa.id } });
+      },
+      error: () => {
+        this.abrindoMesaId = null;
+        this.erro = 'Não foi possível abrir a comanda dessa mesa.';
+      },
+    });
   }
 }

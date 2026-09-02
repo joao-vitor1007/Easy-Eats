@@ -1,63 +1,106 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface Produto {
-  id: string;
-  nome: string;
-  categoria: string;
-  quantidade: number;
-  quantidadeMinima: number;
-  unidade: string;
-}
-
-interface Movimentacao {
-  id: string;
-  nomeProduto: string;
-  tipo: 'entrada' | 'saida';
-  quantidade: number;
-  data: Date;
-}
-
-const ICONE_POR_CATEGORIA: Record<string, string> = {
-  Pães: 'bi-basket3',
-  Carnes: 'bi-fire',
-  Laticínios: 'bi-egg',
-  Vegetais: 'bi-flower1',
-  Congelados: 'bi-snow',
-  Bebidas: 'bi-cup-straw',
-};
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Insumo, InsumoService } from './insumo.service';
+import { MensagemErroApiUtil } from '../utils/mensagemErroApiUtil';
 
 @Component({
   selector: 'app-controle-estoque',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './controle-estoque.html',
   styleUrls: ['./controle-estoque.scss'],
 })
 export class ControleEstoque implements OnInit {
-  produtos: Produto[] = [
-    { id: '1', nome: 'Pão de Hambúrguer', categoria: 'Pães', quantidade: 15, quantidadeMinima: 30, unidade: 'un' },
-    { id: '2', nome: 'Carne Bovina', categoria: 'Carnes', quantidade: 8, quantidadeMinima: 20, unidade: 'kg' },
-    { id: '3', nome: 'Queijo Cheddar', categoria: 'Laticínios', quantidade: 12, quantidadeMinima: 15, unidade: 'kg' },
-    { id: '4', nome: 'Alface', categoria: 'Vegetais', quantidade: 25, quantidadeMinima: 20, unidade: 'un' },
-    { id: '5', nome: 'Tomate', categoria: 'Vegetais', quantidade: 30, quantidadeMinima: 25, unidade: 'kg' },
-    { id: '6', nome: 'Batata Congelada', categoria: 'Congelados', quantidade: 5, quantidadeMinima: 15, unidade: 'kg' },
-    { id: '7', nome: 'Refrigerante', categoria: 'Bebidas', quantidade: 40, quantidadeMinima: 30, unidade: 'un' },
-  ];
+  private fb = new FormBuilder();
 
-  movimentacoes: Movimentacao[] = [
-    { id: '1', nomeProduto: 'Pão de Hambúrguer', tipo: 'saida', quantidade: 10, data: new Date(2026, 4, 20, 19, 30) },
-    { id: '2', nomeProduto: 'Carne Bovina', tipo: 'entrada', quantidade: 20, data: new Date(2026, 4, 19, 14, 15) },
-    { id: '3', nomeProduto: 'Refrigerante', tipo: 'saida', quantidade: 15, data: new Date(2026, 4, 18, 20, 0) },
-  ];
+  insumos: Insumo[] = [];
+  carregando = true;
+  salvando = false;
+  erro: string | null = null;
+  editandoNome: string | null = null;
 
-  estoqueBaixo: Produto[] = [];
+  form = this.fb.group({
+    nome: ['', Validators.required],
+    quantidade: [0, [Validators.required, Validators.min(0)]],
+    unidade: ['', Validators.required],
+  });
 
-  ngOnInit(): void {
-    this.estoqueBaixo = this.produtos.filter((p) => p.quantidade < p.quantidadeMinima);
+  constructor(private insumoService: InsumoService) {}
+
+  ngOnInit() {
+    this.carregar();
   }
 
-  iconeCategoria(categoria: string): string {
-    return ICONE_POR_CATEGORIA[categoria] ?? 'bi-box-seam';
+  carregar() {
+    this.carregando = true;
+    this.insumoService.listar().subscribe({
+      next: (insumos) => {
+        this.insumos = insumos;
+        this.carregando = false;
+      },
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível carregar o estoque.');
+        this.carregando = false;
+      },
+    });
+  }
+
+  get totalItens(): number {
+    return this.insumos.length;
+  }
+
+  salvar() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    const { nome, quantidade, unidade } = this.form.value;
+    const insumo: Insumo = { nome: nome!, quantidade: quantidade!, unidade: unidade! };
+
+    this.salvando = true;
+    this.erro = null;
+
+    const requisicao =
+      this.editandoNome !== null
+        ? this.insumoService.atualizar(this.editandoNome, insumo)
+        : this.insumoService.cadastrar(insumo);
+
+    requisicao.subscribe({
+      next: () => {
+        this.salvando = false;
+        this.editandoNome = null;
+        this.form.reset({ quantidade: 0 });
+        this.carregar();
+      },
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível salvar o insumo.');
+        this.salvando = false;
+      },
+    });
+  }
+
+  editar(insumo: Insumo) {
+    this.editandoNome = insumo.nome;
+    this.form.setValue({ nome: insumo.nome, quantidade: insumo.quantidade, unidade: insumo.unidade });
+  }
+
+  cancelarEdicao() {
+    this.editandoNome = null;
+    this.form.reset({ quantidade: 0 });
+  }
+
+  remover(insumo: Insumo) {
+    if (!confirm(`Remover o insumo "${insumo.nome}" do estoque?`)) {
+      return;
+    }
+
+    this.insumoService.remover(insumo.nome).subscribe({
+      next: () => this.carregar(),
+      error: (erro) => {
+        this.erro = MensagemErroApiUtil.extrair(erro, 'Não foi possível remover o insumo.');
+      },
+    });
   }
 }

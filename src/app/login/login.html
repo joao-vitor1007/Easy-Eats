@@ -32,11 +32,15 @@
 
         <form [formGroup]="form" (ngSubmit)="handleLogin()">
           <div class="form-group">
-            <label>Email</label>
-            <div class="input-icone">
-              <i class="bi bi-envelope"></i>
-              <input type="email" placeholder="seu@email.com" formControlName="email" />
-            </div>
+            <label [attr.for]="campoEmailLogin.inputId">Email</label>
+            <app-campo-texto
+              #campoEmailLogin
+              type="email"
+              icone="bi-envelope"
+              placeholder="seu@email.com"
+              autocomplete="email"
+              formControlName="email"
+            ></app-campo-texto>
 
             <small *ngIf="form.get('email')?.touched && form.get('email')?.errors">
               <span *ngIf="form.get('email')?.errors?.['required']">
@@ -50,23 +54,13 @@
 
           <div class="form-group">
             <div class="linha-label">
-              <label>Senha</label>
+              <label [attr.for]="campoSenhaLogin.inputId">Senha</label>
               <button type="button" class="link-recuperar" (click)="abrirRecuperarSenha()">
                 Esqueceu a senha?
               </button>
             </div>
 
-            <div class="input-icone">
-              <i class="bi bi-lock"></i>
-              <input
-                [type]="showPassword ? 'text' : 'password'"
-                placeholder="••••••••"
-                formControlName="password"
-              />
-              <button type="button" (click)="togglePassword()" class="btn-mostrar-senha">
-                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-              </button>
-            </div>
+            <app-campo-senha #campoSenhaLogin formControlName="password"></app-campo-senha>
 
             <small *ngIf="form.get('password')?.touched && form.get('password')?.errors">
               <p class="msg-validacoes">{{ mensagensValidacoes.password.required }}</p>
@@ -84,38 +78,13 @@
 
         <div class="cabecalho-form">
           <h2>Recuperar senha</h2>
-          <p>Informe seu email para receber o link de redefinição</p>
+          <p>Redefinição automática ainda não está disponível</p>
         </div>
 
-        @if (!recuperacaoEnviada) {
-          <form [formGroup]="recuperarForm" (ngSubmit)="enviarRecuperacao()">
-            <div class="form-group">
-              <label>Email</label>
-              <div class="input-icone">
-                <i class="bi bi-envelope"></i>
-                <input type="email" placeholder="seu@email.com" formControlName="email" />
-              </div>
-
-              <small *ngIf="recuperarForm.get('email')?.touched && recuperarForm.get('email')?.errors">
-                <span *ngIf="recuperarForm.get('email')?.errors?.['required']">
-                  <p class="msg-validacoes">{{ mensagensValidacoes.email.required }}</p>
-                </span>
-                <span *ngIf="recuperarForm.get('email')?.errors?.['email']">
-                  <p class="msg-validacoes">{{ mensagensValidacoes.email.email }}</p>
-                </span>
-              </small>
-            </div>
-
-            <button type="submit" class="btn-entrar">
-              Enviar link de recuperação
-            </button>
-          </form>
-        } @else {
-          <div class="confirmacao-envio">
-            <i class="bi bi-info-circle"></i>
-            <p>A recuperação automática de senha ainda não está disponível. Entre em contato com um administrador do seu restaurante para redefinir sua senha.</p>
-          </div>
-        }
+        <div class="confirmacao-envio">
+          <i class="bi bi-info-circle"></i>
+          <p>Por enquanto, a redefinição de senha é feita por um administrador do seu restaurante. Entre em contato com ele para receber uma nova senha.</p>
+        </div>
       }
 
       <p class="footer">EasyEats POS © {{ currentYear }}</p>

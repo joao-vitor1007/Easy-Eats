@@ -1,0 +1,80 @@
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css');
+
+:host { display: block; width: 100%; font-family: Inter, 'Poppins', sans-serif; }
+.pagina { padding: 24px 28px 60px; box-sizing: border-box; }
+.topo { margin-bottom: 24px; }
+.topo h1 { margin: 0; font-size: 28px; font-weight: 800; color: #111827; }
+.topo p { margin: 6px 0 0; color: #6b7280; font-size: 14.5px; }
+
+.abas { display: flex; gap: 8px; margin-bottom: 16px; }
+.abas button {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 999px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+.abas button.ativa { background: #4f46e5; border-color: #4f46e5; color: #fff; }
+
+.painel { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px 18px; margin-bottom: 16px; }
+.painel h3 { margin: 0 0 14px; font-size: 15.5px; font-weight: 700; color: #111827; }
+
+.grid-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 14px; }
+.form-linha { display: flex; flex-direction: column; gap: 4px; }
+.form-linha label { font-size: 12.5px; font-weight: 600; color: #374151; }
+.form-linha input,
+.form-linha select {
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13.5px;
+}
+
+.toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #374151; margin-bottom: 14px; }
+
+.btn-primario {
+  border: none;
+  background: #4f46e5;
+  color: #fff;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-secundario {
+  border: 1px solid #4f46e5;
+  color: #4f46e5;
+  background: #fff;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.btn-remover { border: none; background: none; color: #dc2626; cursor: pointer; font-size: 15px; }
+
+.badge { font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.badge.sucesso { background: #ecfdf5; color: #16a34a; }
+.badge.neutro { background: #f3f4f6; color: #6b7280; }
+
+.vazio { text-align: center; color: #9ca3af; font-size: 13px; padding: 20px 0; margin: 0; }
+
+.lista { display: flex; flex-direction: column; gap: 8px; }
+.linha {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+.linha .info { display: flex; flex-direction: column; }
+.linha .info span { color: #6b7280; font-size: 12.5px; }
+.linha .direita { display: flex; align-items: center; gap: 10px; }

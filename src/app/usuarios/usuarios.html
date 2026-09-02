@@ -4,40 +4,75 @@
     <p>Gerencie os usuários com acesso ao sistema</p>
   </header>
 
+  @if (erro) {
+    <div class="alerta-erro">{{ erro }}</div>
+  }
+
   <div class="grid-duas-colunas">
     <section class="painel">
       <h3>Novo Usuário</h3>
 
+      @if (sucesso) {
+        <div class="alerta-sucesso">
+          <i class="bi bi-check-circle"></i> Usuário cadastrado com sucesso!
+        </div>
+      }
+
       <form [formGroup]="form" (ngSubmit)="adicionar()">
         <div class="campo">
-          <label>Nome</label>
-          <input type="text" placeholder="Ex: Maria da Silva" formControlName="nome" />
-          @if (form.get('nome')?.touched && form.get('nome')?.errors?.['required']) {
-            <small class="erro">Nome é obrigatório.</small>
+          <label [attr.for]="campoNomeUsuario.inputId">Nome</label>
+          <app-campo-texto #campoNomeUsuario placeholder="Ex: Maria da Silva" autocomplete="name" formControlName="nome"></app-campo-texto>
+          @if (form.controls.nome.touched && form.controls.nome.invalid) {
+            <small class="erro">Informe o nome do usuário.</small>
           }
         </div>
 
         <div class="campo">
-          <label>E-mail</label>
-          <input type="email" placeholder="Ex: maria@easyeats.com" formControlName="email" />
-          @if (form.get('email')?.touched && form.get('email')?.errors?.['required']) {
-            <small class="erro">E-mail é obrigatório.</small>
+          <label [attr.for]="campoEmailUsuario.inputId">E-mail</label>
+          <app-campo-texto #campoEmailUsuario type="email" placeholder="Ex: maria@easyeats.com" autocomplete="email" formControlName="email"></app-campo-texto>
+          @if (form.controls.email.touched && form.controls.email.errors?.['required']) {
+            <small class="erro">Informe o e-mail do usuário.</small>
           }
-          @if (form.get('email')?.touched && form.get('email')?.errors?.['email']) {
+          @if (form.controls.email.touched && form.controls.email.errors?.['email']) {
             <small class="erro">Informe um e-mail válido.</small>
           }
         </div>
 
         <div class="campo">
+          <label [attr.for]="campoSenhaUsuario.inputId">Senha</label>
+          <app-campo-senha #campoSenhaUsuario formControlName="senha"></app-campo-senha>
+          @if (form.controls.senha.touched && form.controls.senha.errors?.['required']) {
+            <small class="erro">Crie uma senha para o usuário.</small>
+          }
+          @if (form.controls.senha.touched && form.controls.senha.errors?.['minlength']) {
+            <small class="erro">A senha deve ter pelo menos 6 caracteres.</small>
+          }
+        </div>
+
+        <div class="campo">
           <label>Perfil</label>
-          <select formControlName="perfil">
-            <option value="Administrador">Administrador</option>
-            <option value="Operador">Operador</option>
-          </select>
+          <div class="grade-perfis" role="radiogroup" aria-label="Perfil do usuário">
+            @for (opcao of opcoesPerfil; track opcao.valor) {
+              <button
+                type="button"
+                class="cartao-perfil"
+                [class.selecionado]="form.controls.role.value === opcao.valor"
+                role="radio"
+                [attr.aria-checked]="form.controls.role.value === opcao.valor"
+                (click)="selecionarPerfil(opcao.valor)"
+              >
+                <i class="bi" [ngClass]="opcao.icone"></i>
+                <span class="cartao-perfil__label">{{ opcao.label }}</span>
+                <span class="cartao-perfil__descricao">{{ opcao.descricao }}</span>
+              </button>
+            }
+          </div>
         </div>
 
         <div class="acoes-form">
-          <button type="submit" class="btn-salvar">Adicionar Usuário</button>
+          <button type="submit" class="btn-salvar" [disabled]="form.invalid || enviando">
+            {{ enviando ? 'Salvando...' : 'Adicionar Usuário' }}
+          </button>
         </div>
       </form>
     </section>
@@ -45,27 +80,37 @@
     <section class="painel">
       <h3>Usuários Cadastrados</h3>
 
-      <div class="lista">
-        @for (usuario of usuarios; track usuario.id) {
-          <div class="linha">
-            <div class="info">
-              <strong>{{ usuario.nome }}</strong>
-              <span>{{ usuario.email }}</span>
-            </div>
+      @if (carregando) {
+        <app-carregando texto="Carregando usuários..."></app-carregando>
+      } @else {
+        <div class="lista">
+          @for (usuario of usuarios; track usuario.id) {
+            <div class="linha">
+              <div class="info">
+                <strong>{{ usuario.nome }}</strong>
+                <span>{{ usuario.email }}</span>
+              </div>
 
-            <div class="direita">
-              <span class="badge" [class.roxo]="usuario.perfil === 'Administrador'" [class.azul]="usuario.perfil === 'Operador'">
-                {{ usuario.perfil }}
-              </span>
-              <span class="badge" [class.sucesso]="usuario.status === 'Ativo'" [class.neutro]="usuario.status === 'Inativo'">
-                {{ usuario.status }}
-              </span>
+              <div class="direita">
+                <span
+                  class="badge"
+                  [class.roxo]="usuario.role === 'ADMINISTRADOR'"
+                  [class.azul]="usuario.role === 'OPERADOR'"
+                  [class.laranja]="usuario.role === 'GARCOM'"
+                  [class.verde]="usuario.role === 'COZINHEIRO'"
+                >
+                  {{ labelPerfil(usuario.role) }}
+                </span>
+                <span class="badge" [class.sucesso]="usuario.flAtivo !== false" [class.neutro]="usuario.flAtivo === false">
+                  {{ usuario.flAtivo === false ? 'Inativo' : 'Ativo' }}
+                </span>
+              </div>
             </div>
-          </div>
-        } @empty {
-          <p class="vazio">Nenhum usuário cadastrado.</p>
-        }
-      </div>
+          } @empty {
+            <p class="vazio">Nenhum usuário cadastrado.</p>
+          }
+        </div>
+      }
     </section>
   </div>
 </div>

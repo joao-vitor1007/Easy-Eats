@@ -27,9 +27,6 @@
   font-size: 14.5px;
 }
 
-/* ========================= */
-/* FILTROS (Pills) & TABS */
-/* ========================= */
 .filtros {
   margin: 20px 0;
   display: flex;
@@ -57,34 +54,44 @@
   }
 }
 
-.tabs {
+.form-periodo {
   display: flex;
-  margin: 25px 0;
-  background: #fff5eb;
-  border-radius: 8px;
-  padding: 6px;
-
-  span {
-    flex: 1;
-    text-align: center;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 8px;
-    font-weight: 600;
-    color: #888;
-    transition: 0.2s;
-
-    &.ativo {
-      background: white;
-      color: #ea580c;
-      box-shadow: none;
-    }
-  }
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
-/* ========================= */
-/* SUMMARY GRID */
-/* ========================= */
+.form-linha {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-linha label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-linha input {
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13.5px;
+}
+
+.btn-primario {
+  border: none;
+  background: #ea580c;
+  color: #fff;
+  border-radius: 6px;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .summary-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -105,7 +112,6 @@
       color: #1a1a1a;
       margin-bottom: 5px;
 
-      &.warning { color: #ea580c; }
       &.text-success { color: #2e7d32; }
       &.text-error { color: #c62828; }
     }
@@ -120,205 +126,6 @@
   }
 }
 
-/* ========================= */
-/* CARD FORM (Main Container) */
-/* ========================= */
-.card-form {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: none;
-
-  &.mb-25 {
-    margin-bottom: 25px;
-  }
-
-  .list-header {
-    border-bottom: 2px solid #fafafa;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-
-    h3 {
-      font-size: 16px;
-      font-weight: 700;
-      color: #333;
-      margin: 0;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-  }
-
-  /* LIST ITEMS */
-  .list-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-
-    .list-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #f0f0f0;
-      
-      &:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-      }
-
-      &.highlight-result {
-        border-top: 2px solid #f0f0f0;
-        margin-top: 5px;
-        padding-top: 20px;
-      }
-
-      .item-name {
-        font-size: 15px;
-        font-weight: 600;
-        color: #444;
-      }
-
-      .item-info {
-        font-size: 14px;
-        font-weight: 700;
-        color: #1a1a1a;
-      }
-    }
-  }
-}
-
-/* BADGES */
-.status-badge {
-  font-size: 11px;
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-weight: 700;
-  text-transform: uppercase;
-  display: inline-block;
-
-  &.success {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-  }
-
-  &.error {
-    background-color: #ffebee;
-    color: #c62828;
-  }
-
-  &.warning-bg {
-    background-color: #fff5eb;
-    color: #ea580c;
-  }
-}
-
-/* ========================= */
-/* PRODUTOS (Grid Interno) */
-/* ========================= */
-.input-busca {
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 14px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  font-size: 14px;
-  box-sizing: border-box;
-  outline: none;
-  transition: 0.2s;
-
-  &:focus {
-    border-color: #ea580c;
-    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
-  }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 15px;
-}
-
-.produto-card {
-  background: white;
-  padding: 16px;
-  border-radius: 8px;
-  border: 1px solid #f0f0f0;
-  transition: 0.2s;
-  box-shadow: none;
-
-  &.alerta {
-    border: 1px solid #e5e7eb;
-    background: #fffdfa;
-  }
-
-  .top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .icone-produto {
-      width: 38px;
-      height: 38px;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff7ed;
-      color: #ea580c;
-      font-size: 17px;
-    }
-
-    .actions button {
-      margin-left: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      width: 30px;
-      height: 30px;
-      border-radius: 8px;
-      border: 1px solid #e5e7eb;
-      background: #fff;
-      color: #6b7280;
-      transition: 0.2s;
-
-      &:hover {
-        background: #f8f5f2;
-        color: #111827;
-      }
-    }
-  }
-
-  h3 {
-    margin: 15px 0 5px;
-    font-size: 16px;
-    color: #1a1a1a;
-  }
-
-  small {
-    color: #888;
-    font-weight: 500;
-  }
-
-  .preco {
-    margin-top: 12px;
-    font-weight: 800;
-    color: #ea580c;
-    font-size: 16px;
-  }
-
-  .estoque {
-    margin-top: 15px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #666;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px dashed #eee;
-    padding-top: 12px;
-  }
-}
-
 .vazio {
   text-align: center;
   padding: 40px 0;
@@ -326,20 +133,20 @@
   font-weight: 500;
 }
 
-/* ========================= */
-/* RESPONSIVIDADE */
-/* ========================= */
+.nota {
+  margin-top: 20px;
+  font-size: 12.5px;
+  color: #9ca3af;
+
+  a {
+    color: #ea580c;
+    font-weight: 600;
+    text-decoration: none;
+  }
+}
+
 @media (max-width: 600px) {
   .summary-grid {
     grid-template-columns: 1fr;
-  }
-  
-  .card-form {
-    padding: 20px;
-  }
-
-  .tabs span {
-    font-size: 13px;
-    padding: 8px 4px;
   }
 }

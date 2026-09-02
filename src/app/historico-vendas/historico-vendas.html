@@ -4,11 +4,15 @@
     <p>Consulte os pedidos realizados e filtre por status</p>
   </header>
 
+  @if (erro) {
+    <p class="vazio">{{ erro }}</p>
+  }
+
   <div class="grid-resumo">
     <div class="resumo-card">
       <div class="resumo-icon verde"><i class="bi bi-cash-stack"></i></div>
       <div>
-        <div class="resumo-valor">R$ {{ totalFiltrado.toFixed(2) }}</div>
+        <div class="resumo-valor">{{ totalFiltrado | currency: 'BRL' }}</div>
         <div class="resumo-label">Valor total</div>
       </div>
     </div>
@@ -16,7 +20,7 @@
     <div class="resumo-card">
       <div class="resumo-icon azul"><i class="bi bi-receipt"></i></div>
       <div>
-        <div class="resumo-valor">{{ totalPedidos }}</div>
+        <div class="resumo-valor">{{ totalVendas }}</div>
         <div class="resumo-label">Pedidos</div>
       </div>
     </div>
@@ -25,7 +29,7 @@
   <section class="painel">
     <input
       type="text"
-      placeholder="Buscar por nome ou #pedido"
+      placeholder="Buscar por mesa/cliente ou #pedido"
       class="input-busca"
       [(ngModel)]="busca"
     />
@@ -41,32 +45,36 @@
       }
     </div>
 
-    <div class="lista">
-      @for (pedido of pedidosFiltrados; track pedido.id) {
-        <div class="card-pedido">
-          <div class="top">
-            <strong>#{{ pedido.id }} {{ pedido.cliente }}</strong>
-            <span class="status {{ pedido.status }}">
-              {{ pedido.status }}
-            </span>
-          </div>
+    @if (carregando) {
+      <p class="vazio">Carregando pedidos...</p>
+    } @else {
+      <div class="lista">
+        @for (venda of vendasFiltradas; track venda.id) {
+          <div class="card-pedido">
+            <div class="top">
+              <strong>#{{ venda.id }} {{ identificacao(venda) }}</strong>
+              <span class="status {{ venda.status.toLowerCase() }}">
+                {{ venda.status }}
+              </span>
+            </div>
 
-          <div class="itens">
-            @for (item of pedido.itens; track $index) {
-              <p>{{ item.nome }} x{{ item.quantidade }}</p>
-            }
-          </div>
+            <div class="itens">
+              @for (item of venda.itens; track item.id) {
+                <p>{{ item.produto.nome }} x{{ item.quantidade }}</p>
+              }
+            </div>
 
-          <div class="footer">
-            <span>{{ pedido.horario }}</span>
-            <strong class="valor-pedido">
-              R$ {{ pedido.total.toFixed(2) }}
-            </strong>
+            <div class="footer">
+              <span>{{ venda.tipo }}</span>
+              <strong class="valor-pedido">
+                {{ totalVenda(venda) | currency: 'BRL' }}
+              </strong>
+            </div>
           </div>
-        </div>
-      } @empty {
-        <p class="vazio">Nenhum pedido encontrado.</p>
-      }
-    </div>
+        } @empty {
+          <p class="vazio">Nenhum pedido encontrado.</p>
+        }
+      </div>
+    }
   </section>
 </div>

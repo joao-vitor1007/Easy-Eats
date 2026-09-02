@@ -1,8 +1,12 @@
 <div class="pagina">
   <header class="topo">
     <h1>Mesas</h1>
-    <p>Visualize e gerencie o status das mesas do salão</p>
+    <p>Visualize o status das mesas do salão e abra comandas</p>
   </header>
+
+  @if (erro) {
+    <p class="vazio">{{ erro }}</p>
+  }
 
   <div class="grid-stats">
     <div class="stat-card">
@@ -22,16 +26,25 @@
   <section class="painel">
     <h3>Mapa de Mesas</h3>
 
-    <div class="grid-mesas">
-      @for (mesa of mesas; track mesa.numero) {
-        <button type="button" class="cartao-mesa" (click)="cicloStatus(mesa)">
-          <i class="bi bi-grid-3x3-gap-fill"></i>
-          <span class="numero-mesa">Mesa {{ mesa.numero }}</span>
-          <span class="badge" [ngClass]="badgeClasse(mesa.status)">{{ mesa.status }}</span>
-        </button>
-      } @empty {
-        <p class="vazio">Nenhuma mesa cadastrada.</p>
-      }
-    </div>
+    @if (carregando) {
+      <p class="vazio">Carregando mesas...</p>
+    } @else {
+      <div class="grid-mesas">
+        @for (mesa of mesas; track mesa.id) {
+          <button
+            type="button"
+            class="cartao-mesa"
+            [disabled]="abrindoMesaId === mesa.id"
+            (click)="selecionarMesa(mesa)"
+          >
+            <i class="bi bi-grid-3x3-gap-fill"></i>
+            <span class="numero-mesa">Mesa {{ mesa.numero }}</span>
+            <span class="badge" [ngClass]="badgeClasse(mesa.status)">{{ rotulo(mesa.status) }}</span>
+          </button>
+        } @empty {
+          <p class="vazio">Nenhuma mesa cadastrada.</p>
+        }
+      </div>
+    }
   </section>
 </div>
